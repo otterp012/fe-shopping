@@ -42,12 +42,25 @@
             />
 
             <div class="search-wrapper">
-              <select name="select" id="">
-                <option value="전체">전체</option>
-                <option value="뷰티">뷰티</option>
-                <option value="육아">육아</option>
-              </select>
-              <input type="text" />
+              <div class="select-btn-wrapper">
+                <button class="select-btn">
+                  <span>전체</span>
+                  <i class="fas fa-sort-down"></i>
+                </button>
+
+                <ul class="select-options">
+                  <li class="select-option">사과</li>
+                  <li class="select-option">사과</li>
+                  <li class="select-option">사과</li>
+                  <li class="select-option">사과</li>
+                </ul>
+              </div>
+              <input type="text" class="search-bar" />
+
+              <ul class="searched-words">
+                <li>아이폰</li>
+                <li>아이</li>
+              </ul>
             </div>
           </div>
 
@@ -58,7 +71,7 @@
               <li>쿠팡비즈</li>
               <li>로켓직구</li>
             </ul>
-            <ul class="header-sub-nav-right-lists">
+            <ul class="header-nav-right-lists">
               <li>골드박스</li>
               <li>와우회원할인</li>
               <li>이벤트/쿠폰</li>
@@ -81,5 +94,5 @@
       </header>
     </div>
   </body>
-  <script src="app.js"></script>
+  <!-- <script src="app.js"></script> -->
 </html>

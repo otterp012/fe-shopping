@@ -80,10 +80,13 @@
         .search-wrapper {
           @include flex();
           @include border();
+          position: relative;
           width: 495px;
           height: 40px;
 
-          select {
+          .select-btn-wrapper {
+            @include flex();
+            position: relative;
             width: 135px;
             height: 40px;
             border: {
@@ -93,6 +96,33 @@
               right: #eeeeee 1px solid;
             }
             @include focusOutline();
+
+            .select-btn {
+              width: 100%;
+              height: 100%;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              padding: 5px;
+            }
+            .select-options {
+              position: absolute;
+              top: 40px;
+              left: 0;
+              width: 100px;
+              border-top: #eeeeee 1px solid;
+              padding-top: 10px;
+              background-color: #fff;
+              display: none;
+
+              &.active {
+                display: list-item;
+              }
+              .select-option {
+                margin-bottom: 10px;
+                @include flex();
+              }
+            }
           }
 
           input {
@@ -101,6 +131,19 @@
             padding-left: 20px;
             border: none;
             @include focusOutline();
+          }
+          .searched-words {
+            position: absolute;
+            top: 40px;
+            right: 0px;
+            width: 395px;
+            height: 330px;
+            border-top: 2px #eeeeee solid;
+            background-color: #fff;
+            display: none;
+            &.active {
+              display: block;
+            }
           }
         }
       }

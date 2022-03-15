@@ -151,11 +151,26 @@
       -ms-flex-align: center;
           align-items: center;
   border: #4185f5 2px solid;
+  position: relative;
   width: 495px;
   height: 40px;
 }
 
-.header-wrapper header .header-main-wrapper .logo-search-wrapper .search-wrapper select {
+.header-wrapper header .header-main-wrapper .logo-search-wrapper .search-wrapper .select-btn-wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: auto;
+          flex-direction: auto;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  position: relative;
   width: 135px;
   height: 40px;
   border-top: none;
@@ -164,8 +179,55 @@
   border-right: #eeeeee 1px solid;
 }
 
-.header-wrapper header .header-main-wrapper .logo-search-wrapper .search-wrapper select:focus {
+.header-wrapper header .header-main-wrapper .logo-search-wrapper .search-wrapper .select-btn-wrapper:focus {
   outline: none;
+}
+
+.header-wrapper header .header-main-wrapper .logo-search-wrapper .search-wrapper .select-btn-wrapper .select-btn {
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 5px;
+}
+
+.header-wrapper header .header-main-wrapper .logo-search-wrapper .search-wrapper .select-btn-wrapper .select-options {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  width: 100px;
+  border-top: #eeeeee 1px solid;
+  padding-top: 10px;
+  background-color: #fff;
+  display: none;
+}
+
+.header-wrapper header .header-main-wrapper .logo-search-wrapper .search-wrapper .select-btn-wrapper .select-options.active {
+  display: list-item;
+}
+
+.header-wrapper header .header-main-wrapper .logo-search-wrapper .search-wrapper .select-btn-wrapper .select-options .select-option {
+  margin-bottom: 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: auto;
+          flex-direction: auto;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 .header-wrapper header .header-main-wrapper .logo-search-wrapper .search-wrapper input {
@@ -177,6 +239,21 @@
 
 .header-wrapper header .header-main-wrapper .logo-search-wrapper .search-wrapper input:focus {
   outline: none;
+}
+
+.header-wrapper header .header-main-wrapper .logo-search-wrapper .search-wrapper .searched-words {
+  position: absolute;
+  top: 40px;
+  right: 0px;
+  width: 395px;
+  height: 330px;
+  border-top: 2px #eeeeee solid;
+  background-color: #fff;
+  display: none;
+}
+
+.header-wrapper header .header-main-wrapper .logo-search-wrapper .search-wrapper .searched-words.active {
+  display: block;
 }
 
 .header-wrapper .header-nav-wrapper {
