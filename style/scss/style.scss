@@ -68,96 +68,119 @@
       width: 760px;
       padding-left: 10px;
       margin-top: 30px;
+    }
+  }
+}
 
-      .logo-search-wrapper {
-        width: 750px;
-        @include flex($justify-content: space-around);
-        img {
-          width: 190px;
-          height: 45px;
+.logo-search-wrapper {
+  width: 750px;
+  @include flex($justify-content: space-around);
+  img {
+    width: 190px;
+    height: 45px;
+  }
+
+  .search-wrapper {
+    @include flex();
+    @include border();
+    position: relative;
+    width: 495px;
+    height: 40px;
+
+    .select-btn-wrapper {
+      @include flex();
+      position: relative;
+      width: 135px;
+      height: 40px;
+      border: {
+        top: none;
+        bottom: none;
+        left: none;
+        right: #eeeeee 1px solid;
+      }
+      @include focusOutline();
+
+      .select-btn {
+        @include flex($justify-content: space-between);
+        width: 100%;
+        height: 100%;
+        padding: 10px;
+      }
+      .select-options {
+        position: absolute;
+        top: 40px;
+        left: 0;
+        width: 100px;
+        border-top: #eeeeee 1px solid;
+        padding-top: 10px;
+        background-color: #fff;
+        display: none;
+
+        &.active {
+          display: list-item;
         }
-
-        .search-wrapper {
+        .select-option {
+          margin-bottom: 10px;
           @include flex();
-          @include border();
-          position: relative;
-          width: 495px;
-          height: 40px;
-
-          .select-btn-wrapper {
-            @include flex();
-            position: relative;
-            width: 135px;
-            height: 40px;
-            border: {
-              top: none;
-              bottom: none;
-              left: none;
-              right: #eeeeee 1px solid;
-            }
-            @include focusOutline();
-
-            .select-btn {
-              width: 100%;
-              height: 100%;
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-              padding: 5px;
-            }
-            .select-options {
-              position: absolute;
-              top: 40px;
-              left: 0;
-              width: 100px;
-              border-top: #eeeeee 1px solid;
-              padding-top: 10px;
-              background-color: #fff;
-              display: none;
-
-              &.active {
-                display: list-item;
-              }
-              .select-option {
-                margin-bottom: 10px;
-                @include flex();
-              }
-            }
-          }
-
-          input {
-            width: 100%;
-            height: 34px;
-            padding-left: 20px;
-            border: none;
-            @include focusOutline();
-          }
-          .searched-words {
-            position: absolute;
-            top: 40px;
-            right: 0px;
-            width: 395px;
-            height: 330px;
-            border-top: 2px #eeeeee solid;
-            background-color: #fff;
-            display: none;
-            &.active {
-              display: block;
-            }
-          }
         }
       }
     }
-  }
-  .header-nav-wrapper {
-    @include flex($justify-content: space-between);
-    height: 40px;
-    margin: 10px;
-    font-size: 0.9em;
 
-    ul {
-      @include flex($justify-content: space-around);
-      width: 43%;
+    input {
+      width: 100%;
+      height: 34px;
+      padding-left: 20px;
+      border: none;
+      @include focusOutline();
+    }
+    .searched-words {
+      position: absolute;
+      top: 40px;
+      right: 0px;
+      width: 395px;
+      height: 330px;
+      border-top: 2px #eeeeee solid;
+      background-color: #fff;
+      display: none;
+      &.active {
+        display: block;
+      }
+    }
+  }
+}
+
+.header-nav-wrapper {
+  @include flex($justify-content: space-between);
+  height: 40px;
+  margin: 10px;
+  font-size: 0.9em;
+
+  ul {
+    @include flex($justify-content: space-around);
+    .newIcon {
+      width: 15px;
+    }
+
+    img {
+      margin-right: 3px;
+    }
+  }
+
+  li {
+    @include flex();
+    margin-right: 5px;
+  }
+  .rocket {
+    .rocket-icon-wrapper {
+      position: relative;
+      width: 25px;
+      height: 25px;
+      overflow: hidden;
+
+      .rocketIcon {
+        position: absolute;
+        top: -117px;
+      }
     }
   }
 }
@@ -182,5 +205,36 @@
 
   span {
     font-size: 0.8em;
+  }
+}
+
+.banner-wrapper {
+  position: relative;
+  height: 450px;
+
+  .banner {
+    position: absolute;
+    left: -300px;
+  }
+
+  .banner-thumnails-wrapper {
+    position: absolute;
+    top: 30px;
+    right: 80px;
+    z-index: 1;
+  }
+
+  .banner-thumnail {
+    img {
+      width: 180px;
+      height: 60px;
+      vertical-align: bottom;
+    }
+    &.active {
+      img {
+        box-sizing: border-box;
+        border: 2px black solid;
+      }
+    }
   }
 }
