@@ -13,14 +13,12 @@
     <link rel="stylesheet" href="./style/css/style.css" />
   </head>
   <body>
-    <div class="top-bar-wrapper">
+    <!-- <div class="top-bar-wrapper">
       <div class="top-bar">
         <div class="text-container">
           <span>즐겨찾기</span>
-          <span>
-            입점신청
-            <i class="fas fa-caret-down"></i>
-          </span>
+          <span>입점신청</span>
+          <i class="fas fa-caret-down"></i>
         </div>
         <div class="text-container">
           <span>로그인</span>
@@ -28,7 +26,7 @@
           <span>고객센터</span>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <div class="header-wrapper">
       <header class="header">
@@ -45,7 +43,7 @@
 
             <div class="search-wrapper">
               <select name="select" id="">
-                <option value="뷰티">전체</option>
+                <option value="전체">전체</option>
                 <option value="뷰티">뷰티</option>
                 <option value="육아">육아</option>
               </select>
@@ -54,19 +52,19 @@
           </div>
 
           <div class="header-nav-wrapper">
-            <div class="header-main-nav">
-              <span>로캣배송</span>
-              <span>로켓프레시</span>
-              <span>쿠팡비즈</span>
-              <span>로켓직구</span>
-            </div>
-            <div class="header-sub-nav">
-              <span>골드박스</span>
-              <span>와우회원할인</span>
-              <span>이벤트/쿠폰</span>
-              <span>기획전</span>
-              <span>여행/티켓</span>
-            </div>
+            <ul class="header-nav-left-lists">
+              <li>로켓배송</li>
+              <li>로켓프레시</li>
+              <li>쿠팡비즈</li>
+              <li>로켓직구</li>
+            </ul>
+            <ul class="header-sub-nav-right-lists">
+              <li>골드박스</li>
+              <li>와우회원할인</li>
+              <li>이벤트/쿠폰</li>
+              <li>기획전</li>
+              <li>여행/티켓</li>
+            </ul>
           </div>
         </div>
 
@@ -76,11 +74,12 @@
             <span>마이쿠팡</span>
           </div>
           <div class="basket">
-            <i class="fab fa-expeditedssl"></i>
+            <i class="fas fa-shopping-cart"></i>
             <span>장바구니</span>
           </div>
         </div>
       </header>
     </div>
   </body>
+  <script src="app.js"></script>
 </html>

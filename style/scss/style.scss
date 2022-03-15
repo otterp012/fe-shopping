@@ -5,6 +5,16 @@
   align-items: center;
 }
 
+@mixin border($color: #4185f5, $px: 2px) {
+  border: $color $px solid;
+}
+
+@mixin focusOutline($outline: none) {
+  &:focus {
+    outline: $outline;
+  }
+}
+
 .top-bar-wrapper {
   background-color: #f0f0f0;
   @include flex();
@@ -14,9 +24,17 @@
     height: 35px;
     @include flex($justify-content: space-between);
 
-    .text-container {
-      padding: 0 15px;
+    div {
+      padding: 0 10px;
       font-size: 0.6em;
+
+      span {
+        margin-left: 5px;
+      }
+
+      i {
+        margin-left: 3px;
+      }
     }
   }
 }
@@ -28,7 +46,6 @@
     @include flex($justify-content: space-between);
     width: 1000px;
     height: 115px;
-    // background-color: red;
 
     .category-btn {
       @include flex($flex-direction: column);
@@ -50,9 +67,10 @@
     .header-main-wrapper {
       width: 760px;
       padding-left: 10px;
+      margin-top: 30px;
+
       .logo-search-wrapper {
-        width: 800px;
-        // background-color: yellow;
+        width: 750px;
         @include flex($justify-content: space-around);
         img {
           width: 190px;
@@ -61,25 +79,42 @@
 
         .search-wrapper {
           @include flex();
-          width: 520px;
+          @include border();
+          width: 495px;
           height: 40px;
+
           select {
             width: 135px;
             height: 40px;
+            border: {
+              top: none;
+              bottom: none;
+              left: none;
+              right: #eeeeee 1px solid;
+            }
+            @include focusOutline();
           }
 
           input {
-            width: 385px;
+            width: 100%;
             height: 34px;
-            margin-right: 20px;
+            padding-left: 20px;
+            border: none;
+            @include focusOutline();
           }
         }
-
-        .header-nav-wrapper {
-          @include flex($justify-content: space-between);
-          height: 40px;
-        }
       }
+    }
+  }
+  .header-nav-wrapper {
+    @include flex($justify-content: space-between);
+    height: 40px;
+    margin: 10px;
+    font-size: 0.9em;
+
+    ul {
+      @include flex($justify-content: space-around);
+      width: 43%;
     }
   }
 }

@@ -33,9 +33,17 @@
           align-items: center;
 }
 
-.top-bar-wrapper .top-bar .text-container {
-  padding: 0 15px;
+.top-bar-wrapper .top-bar div {
+  padding: 0 10px;
   font-size: 0.6em;
+}
+
+.top-bar-wrapper .top-bar div span {
+  margin-left: 5px;
+}
+
+.top-bar-wrapper .top-bar div i {
+  margin-left: 3px;
 }
 
 .header-wrapper {
@@ -104,10 +112,11 @@
 .header-wrapper header .header-main-wrapper {
   width: 760px;
   padding-left: 10px;
+  margin-top: 30px;
 }
 
 .header-wrapper header .header-main-wrapper .logo-search-wrapper {
-  width: 800px;
+  width: 750px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -141,22 +150,36 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  width: 520px;
+  border: #4185f5 2px solid;
+  width: 495px;
   height: 40px;
 }
 
 .header-wrapper header .header-main-wrapper .logo-search-wrapper .search-wrapper select {
   width: 135px;
   height: 40px;
+  border-top: none;
+  border-bottom: none;
+  border-left: none;
+  border-right: #eeeeee 1px solid;
+}
+
+.header-wrapper header .header-main-wrapper .logo-search-wrapper .search-wrapper select:focus {
+  outline: none;
 }
 
 .header-wrapper header .header-main-wrapper .logo-search-wrapper .search-wrapper input {
-  width: 385px;
+  width: 100%;
   height: 34px;
-  margin-right: 20px;
+  padding-left: 20px;
+  border: none;
 }
 
-.header-wrapper header .header-main-wrapper .logo-search-wrapper .header-nav-wrapper {
+.header-wrapper header .header-main-wrapper .logo-search-wrapper .search-wrapper input:focus {
+  outline: none;
+}
+
+.header-wrapper .header-nav-wrapper {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -171,6 +194,24 @@
       -ms-flex-align: center;
           align-items: center;
   height: 40px;
+  margin: 10px;
+  font-size: 0.9em;
+}
+
+.header-wrapper .header-nav-wrapper ul {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: auto;
+          flex-direction: auto;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 43%;
 }
 
 .header-footer {
