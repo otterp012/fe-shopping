@@ -390,19 +390,30 @@
 }
 
 .banner-wrapper {
-  position: relative;
   height: 450px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: auto;
+          flex-direction: auto;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 .banner-wrapper .banner {
-  position: absolute;
-  left: -300px;
+  position: relative;
 }
 
 .banner-wrapper .banner-thumnails-wrapper {
   position: absolute;
   top: 30px;
-  right: 80px;
+  right: 400px;
   z-index: 1;
 }
 

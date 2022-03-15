@@ -209,18 +209,16 @@
 }
 
 .banner-wrapper {
-  position: relative;
   height: 450px;
-
+  @include flex();
   .banner {
-    position: absolute;
-    left: -300px;
+    position: relative;
   }
 
   .banner-thumnails-wrapper {
     position: absolute;
     top: 30px;
-    right: 80px;
+    right: 400px;
     z-index: 1;
   }
 
