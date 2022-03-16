@@ -254,19 +254,28 @@
   outline: none;
 }
 
-.logo-search-wrapper .search-wrapper .searched-words {
-  display: none;
+.logo-search-wrapper .search-wrapper .search-result-wrapper {
   position: absolute;
   top: 40px;
-  right: 0px;
-  width: 395px;
-  height: 330px;
+  right: 0;
+  width: 360px;
+  z-index: 1;
+}
+
+.logo-search-wrapper .search-wrapper .search-result-wrapper ul {
+  display: none;
+  padding: 10px 20px;
+  font-size: 0.8em;
+}
+
+.logo-search-wrapper .search-wrapper .search-result-wrapper ul.active {
+  display: block;
   border-top: 2px #eeeeee solid;
   background-color: #fff;
 }
 
-.logo-search-wrapper .search-wrapper .searched-words.active {
-  display: block;
+.logo-search-wrapper .search-wrapper .search-result-wrapper ul li {
+  line-height: 20px;
 }
 
 .header-nav-wrapper {

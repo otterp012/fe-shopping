@@ -143,17 +143,34 @@ $main-color: #4185f5;
       border: none;
     }
 
-    .searched-words {
-      display: none;
+    .search-result-wrapper {
       position: absolute;
       top: 40px;
-      right: 0px;
-      width: 395px;
-      height: 330px;
-      border-top: 2px #eeeeee solid;
-      background-color: #fff;
-      &.active {
-        display: block;
+      right: 0;
+      width: 360px;
+      z-index: 1;
+
+      // .history-search-words {
+      //   position: absolute;
+      //   top: 0;
+      //   width: 320px;
+      //   height: 100px;
+      //   background-color: red;
+      // }
+      ul {
+        display: none;
+        padding: 10px 20px;
+        font-size: 0.8em;
+
+        &.active {
+          display: block;
+          border-top: 2px #eeeeee solid;
+          background-color: #fff;
+        }
+
+        li {
+          line-height: 20px;
+        }
       }
     }
   }
