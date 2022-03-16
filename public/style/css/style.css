@@ -171,12 +171,13 @@
       -ms-flex-align: center;
           align-items: center;
   position: relative;
-  width: 135px;
   height: 40px;
   border-top: none;
   border-bottom: none;
   border-left: none;
   border-right: #eeeeee 1px solid;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 
 .logo-search-wrapper .search-wrapper .select-btn-wrapper:focus {
@@ -197,20 +198,22 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  width: 100%;
+  width: 135px;
   height: 100%;
   padding: 10px;
 }
 
 .logo-search-wrapper .search-wrapper .select-btn-wrapper .select-options {
+  display: none;
   position: absolute;
   top: 40px;
   left: 0;
-  width: 100px;
+  height: 720px;
+  width: 135px;
   border-top: #eeeeee 1px solid;
   padding-top: 10px;
   background-color: #fff;
-  display: none;
+  overflow: scroll;
 }
 
 .logo-search-wrapper .search-wrapper .select-btn-wrapper .select-options.active {
@@ -218,7 +221,6 @@
 }
 
 .logo-search-wrapper .search-wrapper .select-btn-wrapper .select-options .select-option {
-  margin-bottom: 10px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -226,12 +228,19 @@
   -webkit-box-direction: normal;
       -ms-flex-direction: auto;
           flex-direction: auto;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: start;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  padding: 10px;
+  font-size: 0.7em;
+  z-index: 1;
+}
+
+.logo-search-wrapper .search-wrapper .select-btn-wrapper .select-options .select-option:hover {
+  cursor: pointer;
 }
 
 .logo-search-wrapper .search-wrapper input {
@@ -246,6 +255,7 @@
 }
 
 .logo-search-wrapper .search-wrapper .searched-words {
+  display: none;
   position: absolute;
   top: 40px;
   right: 0px;
@@ -253,7 +263,6 @@
   height: 330px;
   border-top: 2px #eeeeee solid;
   background-color: #fff;
-  display: none;
 }
 
 .logo-search-wrapper .search-wrapper .searched-words.active {
@@ -332,8 +341,6 @@
 }
 
 .header-footer {
-  width: 150px;
-  height: 100%;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -346,6 +353,8 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  width: 150px;
+  height: 100%;
 }
 
 .header-footer .my-page {
@@ -408,6 +417,7 @@
 
 .banner-wrapper .banner {
   position: relative;
+  z-index: -1;
 }
 
 .banner-wrapper .banner-thumnails-wrapper {
@@ -424,7 +434,7 @@
 }
 
 .banner-wrapper .banner-thumnail.active img {
+  border: #4185f5 2px solid;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
-  border: 2px black solid;
 }

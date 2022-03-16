@@ -1,3 +1,5 @@
+$main-color: #4185f5;
+
 @mixin flex($flex-direction: auto, $justify-content: center) {
   display: flex;
   flex-direction: $flex-direction;
@@ -5,7 +7,7 @@
   align-items: center;
 }
 
-@mixin border($color: #4185f5, $px: 2px) {
+@mixin border($color: $main-color, $px: 2px) {
   border: $color $px solid;
 }
 
@@ -51,7 +53,7 @@
       @include flex($flex-direction: column);
       width: 110px;
       height: 100%;
-      background-color: #4185f5;
+      background-color: $main-color;
       color: #fff;
 
       i {
@@ -90,7 +92,6 @@
     .select-btn-wrapper {
       @include flex();
       position: relative;
-      width: 135px;
       height: 40px;
       border: {
         top: none;
@@ -98,42 +99,52 @@
         left: none;
         right: #eeeeee 1px solid;
       }
+      box-sizing: border-box;
       @include focusOutline();
 
       .select-btn {
         @include flex($justify-content: space-between);
-        width: 100%;
+        width: 135px;
         height: 100%;
         padding: 10px;
       }
       .select-options {
+        display: none;
         position: absolute;
         top: 40px;
         left: 0;
-        width: 100px;
+        height: 720px;
+        width: 135px;
         border-top: #eeeeee 1px solid;
         padding-top: 10px;
         background-color: #fff;
-        display: none;
-
+        overflow: scroll;
         &.active {
           display: list-item;
         }
         .select-option {
-          margin-bottom: 10px;
-          @include flex();
+          @include flex($justify-content: start);
+          padding: 10px;
+          font-size: 0.7em;
+          z-index: 1;
+
+          &:hover {
+            cursor: pointer;
+          }
         }
       }
     }
 
     input {
+      @include focusOutline();
       width: 100%;
       height: 34px;
       padding-left: 20px;
       border: none;
-      @include focusOutline();
     }
+
     .searched-words {
+      display: none;
       position: absolute;
       top: 40px;
       right: 0px;
@@ -141,7 +152,6 @@
       height: 330px;
       border-top: 2px #eeeeee solid;
       background-color: #fff;
-      display: none;
       &.active {
         display: block;
       }
@@ -186,10 +196,9 @@
 }
 
 .header-footer {
+  @include flex($justify-content: space-around);
   width: 150px;
   height: 100%;
-
-  @include flex($justify-content: space-around);
 
   .my-page {
     @include flex($flex-direction: column);
@@ -213,6 +222,7 @@
   @include flex();
   .banner {
     position: relative;
+    z-index: -1;
   }
 
   .banner-thumnails-wrapper {
@@ -230,8 +240,8 @@
     }
     &.active {
       img {
+        @include border();
         box-sizing: border-box;
-        border: 2px black solid;
       }
     }
   }
