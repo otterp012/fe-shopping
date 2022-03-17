@@ -19,20 +19,20 @@ renderFilterOptions();
 selectBtnEventHandler();
 
 const autoSearchWordsEL = document.querySelector('.auto-search-words');
-// const timer = setInterval(() => {
-//   if (document.querySelector('.search-bar').value) {
-//     if (!autoSearchWordsEL.classList.contains('active')) {
-//       autoSearchWordsEL.classList.add('active');
-//     }
-//   } else {
-//     if (autoSearchWordsEL.classList.contains('active'))
-//       autoSearchWordsEL.classList.remove('active');
-//   }
-// }, 500);
+const timer = setInterval(() => {
+  if (document.querySelector('.search-bar').value) {
+    if (!autoSearchWordsEL.classList.contains('active')) {
+      autoSearchWordsEL.classList.add('active');
+    }
+  } else {
+    if (autoSearchWordsEL.classList.contains('active'))
+      autoSearchWordsEL.classList.remove('active');
+  }
+}, 500);
 
-// document.querySelector('.search-bar').addEventListener('keyup', () => {
-//   renderSuggestions(document.querySelector('.search-bar').value);
-// });
+document.querySelector('.search-bar').addEventListener('keyup', () => {
+  renderSuggestions(document.querySelector('.search-bar').value);
+});
 
 function getSuggestions(prefix) {
   return fetch(
@@ -51,10 +51,125 @@ async function renderSuggestions(prefix) {
   document.querySelector('.auto-search-words').innerHTML += suggestionsInfo;
 }
 
-localStorage.setItem('key', 'value');
-console.log(localStorage.getItem('key'))
-console.log(window.localStrage);
+class Searcher {
+  constructor() {}
 
-document.querySelector('.search-bar').addEventListener(('submit'), () => {
-  console.log(autoSearchWordsEL.vlaue)
-})
+  render() {
+    throw 'override!';
+  }
+
+  hasValue(selector) {
+    if (body.querySelector(`${selector}`)) return true;
+    return false;
+  }
+
+  show(selector) {
+    body.querySelector(`${selector}`).style.display = 'block';
+  }
+
+  hide(selector) {
+    body.querySelector(`${selector}`).style.display = 'none';
+  }
+
+  removeHtml(selector) {
+    body.querySelector(`${selector}`).innerHTML = '';
+  }
+
+  addHtml(selector, html) {
+    body.querySelector(`${selector}`).innerHTML = html;
+  }
+
+  timer(callback, ms) {
+    setTimeout(() => callback(), ms);
+  }
+}
+
+class SearchHistoryGenerator extends Searcher {
+  constructor(localStorage) {
+    this.searchHistoryArr = [];
+    this.localStorage = localStorage;
+  }
+
+  init() {}
+
+  template(str) {
+    `<li class="history-search-word"><a href="#">${str}</a>
+    <button class="history-delete-btn">삭제</button>
+  </li>`;
+  }
+
+  displaySearchHistory() {}
+}
+
+const t = document.querySelector('.search-bar');
+const s = document.querySelector('.history-search-words');
+let searchHistoryArr = [];
+// t.addEventListener('keypress', ({ keyCode }) => {
+//   if (keyCode === 13) {
+//     if (searchHistoryArr.length > 10) searchHistoryArr.shift();
+//     searchHistoryArr.push(t.value);
+//     localStorage.setItem('searchHistory', JSON.stringify(searchHistoryArr));
+//     t.value = '';
+//     const view = JSON.parse(localStorage.getItem('searchHistory')).reduce(
+//       (acc, info) => {
+//         return (
+//           acc +
+//           `<li class="history-search-word"><a href="#">${info}</a>
+//           <button class="history-delete-btn">삭제</button>
+//         </li>`
+//         );
+//       },
+//       ''
+//     );
+//     s.innerHTML = '';
+//     s.innerHTML += view;
+//   }
+// });
+document.querySelector('.search').addEventListener('submit', (e) => {
+  e.preventDefault();
+  console.log(1);
+  if (searchHistoryArr.length > 10) searchHistoryArr.shift();
+  searchHistoryArr.push(t.value);
+  localStorage.setItem('searchHistory', JSON.stringify(searchHistoryArr));
+  t.value = '';
+  const view = JSON.parse(localStorage.getItem('searchHistory')).reduce(
+    (acc, info) => {
+      return (
+        acc +
+        `<li class="history-search-word"><a href="#">${info}</a>
+          <button class="history-delete-btn">삭제</button>
+        </li>`
+      );
+    },
+    ''
+  );
+  s.innerHTML = '';
+  s.innerHTML += view;
+});
+
+const deleteBtn = document.querySelector('.history-search-words');
+deleteBtn.addEventListener('click', ({ target }) => {
+  if (target.className === 'history-delete-btn') {
+    const removedText = target.parentNode.innerText
+      .split('\n')
+      .filter((v) => v !== '삭제');
+    searchHistoryArr = searchHistoryArr.filter((v) => v != removedText);
+    localStorage.setItem('searchHistory', JSON.stringify(searchHistoryArr));
+    target.parentNode.remove();
+  }
+});
+
+const Alldelete = document.querySelector('.history-serach-alldelete-btn');
+Alldelete.addEventListener('click', () => {
+  searchHistoryArr = [];
+  localStorage.setItem('searchHistory', JSON.stringify(searchHistoryArr));
+  s.innerHTML = '';
+});
+
+const historyCloseBtn = document.querySelector('.history-serach-close-btn');
+historyCloseBtn.addEventListener('click', () => {
+  searchHistoryArr = [];
+  localStorage.setItem('searchHistory', JSON.stringify(searchHistoryArr));
+  s.innerHTML = '';
+  document.querySelector('.history-search-wrapper').classList.remove('active');
+});
