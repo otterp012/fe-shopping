@@ -1,56 +1,5 @@
 import { utils } from './utils.js';
 
-function selectBtnEventHandler() {
-  document.querySelector('.select-btn').addEventListener('click', () => {
-    document.querySelector('.select-options').classList.toggle('active');
-  });
-}
-
-async function renderFilterOptions() {
-  const filterOptionsJson = await utils.myFetch('/categoryData');
-  const filterOptions = filterOptionsJson.reduce((acc, str) => {
-    return acc + `<li class="select-option">${str}</li>`;
-  }, '');
-
-  document.querySelector('.select-options').innerHTML += filterOptions;
-}
-
-renderFilterOptions();
-selectBtnEventHandler();
-
-const autoSearchWordsEL = document.querySelector('.auto-search-words');
-const timer = setInterval(() => {
-  if (document.querySelector('.search-bar').value) {
-    if (!autoSearchWordsEL.classList.contains('active')) {
-      autoSearchWordsEL.classList.add('active');
-    }
-  } else {
-    if (autoSearchWordsEL.classList.contains('active'))
-      autoSearchWordsEL.classList.remove('active');
-  }
-}, 500);
-
-document.querySelector('.search-bar').addEventListener('keyup', () => {
-  renderSuggestions(document.querySelector('.search-bar').value);
-});
-
-function getSuggestions(prefix) {
-  return fetch(
-    `https://completion.amazon.com/api/2017/suggestions?session-id=133-4736477-7395454&customer-id=&request-id=4YM3EXKRH1QJB16MSJGT&page-type=Gateway&lop=en_US&site-variant=desktop&client-info=amazon-search-ui&mid=ATVPDKIKX0DER&alias=aps&b2b=0&fresh=0&ks=8&prefix=${prefix}&event=onKeyPress&limit=11&fb=1&suggestion-type=KEYWORD`
-  ).then((res) => res.json());
-}
-
-async function renderSuggestions(prefix) {
-  const suggestionsJson = await getSuggestions(prefix);
-  const suggestionsInfo = suggestionsJson.suggestions
-    .map((suggestion) => suggestion.value)
-    .reduce((acc, str) => {
-      return acc + `<li class="auto-search-word">${str}</li>`;
-    }, '');
-  document.querySelector('.auto-search-words').innerHTML = '';
-  document.querySelector('.auto-search-words').innerHTML += suggestionsInfo;
-}
-
 class Searcher {
   constructor() {}
 
@@ -58,17 +7,17 @@ class Searcher {
     throw 'override!';
   }
 
-  hasValue(selector) {
-    if (body.querySelector(`${selector}`)) return true;
+  hasValue(node) {
+    if (node.value) return true;
     return false;
   }
 
-  show(selector) {
-    body.querySelector(`${selector}`).style.display = 'block';
+  show(node) {
+    node.style.display = 'block';
   }
 
-  hide(selector) {
-    body.querySelector(`${selector}`).style.display = 'none';
+  hide(node) {
+    node.style.display = 'none';
   }
 
   removeHtml(selector) {
@@ -82,94 +31,146 @@ class Searcher {
   timer(callback, ms) {
     setTimeout(() => callback(), ms);
   }
+
+  addEvent(node, type, eventHandler) {
+    node.addEventListener(`${type}`, (event) => {
+      eventHandler(event);
+    });
+  }
 }
 
 class SearchHistoryGenerator extends Searcher {
-  constructor(localStorage) {
+  constructor() {
+    super();
     this.searchHistoryArr = [];
-    this.localStorage = localStorage;
+    this.searchFormEl = document.querySelector('.search');
+    this.searchInputEl = document.querySelector('.search-bar');
+    this.searchInputValue = this.searchInputEl.value;
+    this.searchHistoryListsEl = document.querySelector('.history-search-lists');
+    this.historySearchWrapperEl = document.querySelector(
+      '.history-search-wrapper'
+    );
+    this.MAX_SEARCH_HISTORY_NUM = 11;
+    this.LOCAL_STROAGE_NAME = 'searchHistory';
+    this.DELAY = 2000;
+    this.eventListener();
+    this.render();
   }
 
-  init() {}
+  render() {
+    this.searchInputEl.addEventListener('focus', () => {
+      setInterval(() => {
+        if (!this.searchInputEl.value) {
+          this.show(this.historySearchWrapperEl);
+        }
+      });
+    });
+
+    this.searchInputEl.addEventListener('keyup', (event) => {
+      if (event.keyCode == 13) {
+        this.show(this.historySearchWrapperEl);
+      }
+    });
+
+    this.hideSearchHistory();
+  }
+
+  hideSearchHistory() {
+    this.searchInputEl.addEventListener('focus', () => {
+      setInterval(() => {
+        if (this.searchInputEl.value) {
+          this.hide(this.historySearchWrapperEl);
+        }
+      });
+    });
+  }
+
+  eventListener() {
+    this.addEvent(
+      this.searchFormEl,
+      'submit',
+      this.displaySearchHistory.bind(this)
+    );
+
+    this.addEvent(document.body, 'click', this.deleteSearchHistory.bind(this));
+
+    this.addEvent(
+      document.body,
+      'click',
+      this.deleteAllSearchHistory.bind(this)
+    );
+  }
 
   template(str) {
-    `<li class="history-search-word"><a href="#">${str}</a>
+    return `<li class="history-search-list"><a href="#">${str}</a>
     <button class="history-delete-btn">삭제</button>
   </li>`;
   }
 
-  displaySearchHistory() {}
+  setSearchHistory(localStorageName, arr) {
+    localStorage.setItem(`${localStorageName}`, JSON.stringify(`${arr}`));
+  }
+
+  getSearchHistory(localStorageName) {
+    return JSON.parse(localStorage.getItem(`${localStorageName}`)).split(',');
+  }
+
+  displaySearchHistory(event) {
+    event.preventDefault();
+    if (this.searchInputEl.value) {
+      this.searchHistoryArr.push(this.searchInputEl.value);
+    }
+    this.searchInputEl.value = '';
+    this.checkHistoryLength();
+    this.searchHistoryArr = this.removeOverlap(this.searchHistoryArr);
+    this.setSearchHistory(this.LOCAL_STROAGE_NAME, this.searchHistoryArr);
+
+    const searchHistory = this.getSearchHistory(this.LOCAL_STROAGE_NAME).reduce(
+      (acc, info) => {
+        return acc + this.template(info);
+      },
+      ''
+    );
+
+    this.searchHistoryListsEl.innerHTML = '';
+    this.searchHistoryListsEl.innerHTML += searchHistory;
+  }
+
+  checkHistoryLength() {
+    if (this.searchHistoryArr.length >= this.MAX_SEARCH_HISTORY_NUM)
+      this.searchHistoryArr.shift();
+  }
+
+  removeOverlap(arr) {
+    const nonOverlapSet = new Set(arr);
+    return [...nonOverlapSet];
+  }
+
+  deleteSearchHistory(event) {
+    if (event.target.className === 'history-delete-btn') {
+      const historyDeleteBtnEl = document.querySelector('.history-delete-btn');
+      const filteredText = historyDeleteBtnEl.textContent;
+
+      const removedSearchHistory = event.target.parentNode.innerText
+        .split('\n')
+        .filter((text) => text !== filteredText);
+
+      this.searchHistoryArr = this.searchHistoryArr.filter(
+        (text) => text !== removedSearchHistory.toString()
+      );
+
+      this.setSearchHistory(this.LOCAL_STROAGE_NAME, this.searchHistoryArr);
+      event.target.parentNode.remove();
+    }
+  }
+
+  deleteAllSearchHistory(event) {
+    if (event.target.className === 'history-serach-alldelete-btn') {
+      this.searchHistoryArr = [];
+      this.setSearchHistory(this.LOCAL_STROAGE_NAME, this.searchHistoryArr);
+      this.searchHistoryListsEl.innerHTML = '';
+    }
+  }
 }
 
-const t = document.querySelector('.search-bar');
-const s = document.querySelector('.history-search-words');
-let searchHistoryArr = [];
-// t.addEventListener('keypress', ({ keyCode }) => {
-//   if (keyCode === 13) {
-//     if (searchHistoryArr.length > 10) searchHistoryArr.shift();
-//     searchHistoryArr.push(t.value);
-//     localStorage.setItem('searchHistory', JSON.stringify(searchHistoryArr));
-//     t.value = '';
-//     const view = JSON.parse(localStorage.getItem('searchHistory')).reduce(
-//       (acc, info) => {
-//         return (
-//           acc +
-//           `<li class="history-search-word"><a href="#">${info}</a>
-//           <button class="history-delete-btn">삭제</button>
-//         </li>`
-//         );
-//       },
-//       ''
-//     );
-//     s.innerHTML = '';
-//     s.innerHTML += view;
-//   }
-// });
-document.querySelector('.search').addEventListener('submit', (e) => {
-  e.preventDefault();
-  console.log(1);
-  if (searchHistoryArr.length > 10) searchHistoryArr.shift();
-  searchHistoryArr.push(t.value);
-  localStorage.setItem('searchHistory', JSON.stringify(searchHistoryArr));
-  t.value = '';
-  const view = JSON.parse(localStorage.getItem('searchHistory')).reduce(
-    (acc, info) => {
-      return (
-        acc +
-        `<li class="history-search-word"><a href="#">${info}</a>
-          <button class="history-delete-btn">삭제</button>
-        </li>`
-      );
-    },
-    ''
-  );
-  s.innerHTML = '';
-  s.innerHTML += view;
-});
-
-const deleteBtn = document.querySelector('.history-search-words');
-deleteBtn.addEventListener('click', ({ target }) => {
-  if (target.className === 'history-delete-btn') {
-    const removedText = target.parentNode.innerText
-      .split('\n')
-      .filter((v) => v !== '삭제');
-    searchHistoryArr = searchHistoryArr.filter((v) => v != removedText);
-    localStorage.setItem('searchHistory', JSON.stringify(searchHistoryArr));
-    target.parentNode.remove();
-  }
-});
-
-const Alldelete = document.querySelector('.history-serach-alldelete-btn');
-Alldelete.addEventListener('click', () => {
-  searchHistoryArr = [];
-  localStorage.setItem('searchHistory', JSON.stringify(searchHistoryArr));
-  s.innerHTML = '';
-});
-
-const historyCloseBtn = document.querySelector('.history-serach-close-btn');
-historyCloseBtn.addEventListener('click', () => {
-  searchHistoryArr = [];
-  localStorage.setItem('searchHistory', JSON.stringify(searchHistoryArr));
-  s.innerHTML = '';
-  document.querySelector('.history-search-wrapper').classList.remove('active');
-});
+const zz = new SearchHistoryGenerator();
