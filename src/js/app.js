@@ -19,7 +19,7 @@ renderFilterOptions();
 selectBtnEventHandler();
 
 const autoSearchWordsEL = document.querySelector('.auto-search-words');
-// const timer = setTimeout(() => {
+// const timer = setInterval(() => {
 //   if (document.querySelector('.search-bar').value) {
 //     if (!autoSearchWordsEL.classList.contains('active')) {
 //       autoSearchWordsEL.classList.add('active');
@@ -30,18 +30,9 @@ const autoSearchWordsEL = document.querySelector('.auto-search-words');
 //   }
 // }, 500);
 
-if (document.querySelector('.search-bar').value) {
-  if (!autoSearchWordsEL.classList.contains('active')) {
-    autoSearchWordsEL.classList.add('active');
-  }
-} else {
-  if (autoSearchWordsEL.classList.contains('active'))
-    autoSearchWordsEL.classList.remove('active');
-}
-
-document.querySelector('.search-bar').addEventListener('keyup', () => {
-  renderSuggestions(document.querySelector('.search-bar').value);
-});
+// document.querySelector('.search-bar').addEventListener('keyup', () => {
+//   renderSuggestions(document.querySelector('.search-bar').value);
+// });
 
 function getSuggestions(prefix) {
   return fetch(
@@ -59,3 +50,11 @@ async function renderSuggestions(prefix) {
   document.querySelector('.auto-search-words').innerHTML = '';
   document.querySelector('.auto-search-words').innerHTML += suggestionsInfo;
 }
+
+localStorage.setItem('key', 'value');
+console.log(localStorage.getItem('key'))
+console.log(window.localStrage);
+
+document.querySelector('.search-bar').addEventListener(('submit'), () => {
+  console.log(autoSearchWordsEL.vlaue)
+})

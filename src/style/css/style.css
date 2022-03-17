@@ -254,28 +254,99 @@
   outline: none;
 }
 
-.logo-search-wrapper .search-wrapper .search-result-wrapper {
+.search-bottom-wrapper {
   position: absolute;
   top: 40px;
   right: 0;
-  width: 360px;
   z-index: 1;
+  height: 300px;
+  width: 358px;
+  border: 1px solid #dddddd;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 
-.logo-search-wrapper .search-wrapper .search-result-wrapper ul {
-  display: none;
-  padding: 10px 20px;
-  font-size: 0.8em;
-}
-
-.logo-search-wrapper .search-wrapper .search-result-wrapper ul.active {
-  display: block;
-  border-top: 2px #eeeeee solid;
+.search-bottom-wrapper .history-search-wrapper {
+  padding: 5px;
   background-color: #fff;
 }
 
-.logo-search-wrapper .search-wrapper .search-result-wrapper ul li {
-  line-height: 20px;
+.search-bottom-wrapper .history-search-wrapper .history-search-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: auto;
+          flex-direction: auto;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 35px;
+  padding: 5px;
+  font-size: 0.7em;
+  font-weight: 700;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  border-bottom: 1px solid #dddddd;
+  margin-bottom: 5px;
+}
+
+.search-bottom-wrapper .history-search-wrapper .history-search-words {
+  padding: 5px;
+  height: 245px;
+  font-size: 0.8em;
+}
+
+.search-bottom-wrapper .history-search-wrapper .history-search-words .history-search-word {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: auto;
+          flex-direction: auto;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 10px;
+}
+
+.search-bottom-wrapper .history-search-wrapper .history-search-words .history-search-word .history-delete-btn {
+  margin-right: 10px;
+}
+
+.search-bottom-wrapper .history-search-wrapper .history-search-footer {
+  padding: 5px;
+  height: 30px;
+  border-top: 1px solid #dddddd;
+  background-color: #f5f5f5;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  font-size: 0.8em;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: auto;
+          flex-direction: auto;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.search-bottom-wrapper .history-search-wrapper .history-search-footer button {
+  color: #898989;
 }
 
 .header-nav-wrapper {
