@@ -243,14 +243,20 @@
   cursor: pointer;
 }
 
-.logo-search-wrapper .search-wrapper input {
+.logo-search-wrapper .search-wrapper .search {
   width: 100%;
   height: 34px;
-  padding-left: 20px;
+  padding: 20px;
   border: none;
 }
 
-.logo-search-wrapper .search-wrapper input:focus {
+.logo-search-wrapper .search-wrapper .search .search-bar {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.logo-search-wrapper .search-wrapper .search .search-bar:focus {
   outline: none;
 }
 
@@ -298,13 +304,13 @@
   margin-bottom: 5px;
 }
 
-.search-bottom-wrapper .history-search-wrapper .history-search-words {
+.search-bottom-wrapper .history-search-wrapper .history-search-lists {
   padding: 5px;
   height: 245px;
   font-size: 0.8em;
 }
 
-.search-bottom-wrapper .history-search-wrapper .history-search-words .history-search-word {
+.search-bottom-wrapper .history-search-wrapper .history-search-lists .history-search-list {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -321,7 +327,7 @@
   margin-bottom: 10px;
 }
 
-.search-bottom-wrapper .history-search-wrapper .history-search-words .history-search-word .history-delete-btn {
+.search-bottom-wrapper .history-search-wrapper .history-search-lists .history-search-list .history-delete-btn {
   margin-right: 10px;
 }
 

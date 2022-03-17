@@ -119,12 +119,18 @@ $main-color: #4185f5;
       }
     }
 
-    input {
-      @include focusOutline();
+    .search {
       width: 100%;
       height: 34px;
-      padding-left: 20px;
+      padding: 20px;
       border: none;
+
+      .search-bar {
+        width: 100%;
+        height: 100%;
+        border: none;
+        @include focusOutline();
+      }
     }
   }
 }
@@ -153,12 +159,12 @@ $main-color: #4185f5;
       border-bottom: 1px solid #dddddd;
       margin-bottom: 5px;
     }
-    .history-search-words {
+    .history-search-lists {
       padding: 5px;
       height: 245px;
       font-size: 0.8em;
 
-      .history-search-word {
+      .history-search-list {
         @include flex($justify-content: space-between);
         margin-bottom: 10px;
         .history-delete-btn {
