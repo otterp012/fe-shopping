@@ -1,5 +1,3 @@
-import { utils } from './utils.js';
-
 class Searcher {
   constructor() {}
 
@@ -92,8 +90,8 @@ class SearchHistoryGenerator extends Searcher {
 
   template(str) {
     return `<li class="history-search-list"><a href="#">${str}</a>
-    <button class="history-delete-btn">삭제</button>
-  </li>`;
+      <button class="history-delete-btn">삭제</button>
+    </li>`;
   }
 
   setSearchHistory(localStorageName, arr) {
@@ -226,5 +224,4 @@ class SearchAutoGenerator extends Searcher {
   }
 }
 
-const zz = new SearchHistoryGenerator();
-const yy = new SearchAutoGenerator();
+export { SearchHistoryGenerator, SearchAutoGenerator };
