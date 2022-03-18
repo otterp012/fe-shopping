@@ -255,9 +255,9 @@ class SearchAutoGenerator extends Searcher {
       const inputValue = this.searchInputEl.value;
       const inputLength = this.searchInputEl.value.length;
       const arr = item.split('');
-      let correspondedWord = arr.splice(0, inputLength);
-      let lastWord = inputValue[inputLength - 1];
-      let lastWordIndex = correspondedWord.lastIndexOf(lastWord);
+      const correspondedWord = arr.splice(0, inputLength);
+      const lastWord = inputValue[inputLength - 1];
+      const lastWordIndex = correspondedWord.lastIndexOf(lastWord);
       correspondedWord.splice(lastWordIndex + 1, 0, '</strong>');
 
       return (item = ['<strong>', ...correspondedWord, ...arr].join(''));
