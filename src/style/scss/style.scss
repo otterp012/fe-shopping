@@ -94,7 +94,7 @@ $border-color: #dddddd;
         height: 100%;
         padding: 10px;
       }
-      .select-options {
+      .select-option-lists {
         display: none;
         position: absolute;
         top: 40px;
@@ -108,7 +108,7 @@ $border-color: #dddddd;
         &.active {
           display: list-item;
         }
-        .select-option {
+        .select-option-list {
           @include flex($justify-content: start);
           padding: 10px;
           font-size: 0.7em;

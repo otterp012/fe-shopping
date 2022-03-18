@@ -203,7 +203,7 @@
   padding: 10px;
 }
 
-.logo-search-wrapper .search-wrapper .select-btn-wrapper .select-options {
+.logo-search-wrapper .search-wrapper .select-btn-wrapper .select-option-lists {
   display: none;
   position: absolute;
   top: 40px;
@@ -216,11 +216,11 @@
   overflow: scroll;
 }
 
-.logo-search-wrapper .search-wrapper .select-btn-wrapper .select-options.active {
+.logo-search-wrapper .search-wrapper .select-btn-wrapper .select-option-lists.active {
   display: list-item;
 }
 
-.logo-search-wrapper .search-wrapper .select-btn-wrapper .select-options .select-option {
+.logo-search-wrapper .search-wrapper .select-btn-wrapper .select-option-lists .select-option-list {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -239,7 +239,7 @@
   z-index: 1;
 }
 
-.logo-search-wrapper .search-wrapper .select-btn-wrapper .select-options .select-option:hover {
+.logo-search-wrapper .search-wrapper .select-btn-wrapper .select-option-lists .select-option-list:hover {
   cursor: pointer;
 }
 
