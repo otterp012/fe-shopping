@@ -5,12 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>coupang</title>
-    <link rel="stylesheet" href="../style/css/reset.css" />
+    <link rel="stylesheet" href="./src/style/css/reset.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"
     />
-    <link rel="stylesheet" href="../style/css/style.css" />
+    <link rel="stylesheet" href="./src/style/css/style.css" />
   </head>
   <body>
     <div class="top-bar-wrapper">
@@ -43,23 +43,36 @@
 
             <div class="search-wrapper">
               <div class="select-btn-wrapper">
-                <button class="select-btn active">
+                <button class="select-btn">
                   <span class="select-btn-text">전체</span>
                   <i class="fas fa-caret-down"></i>
                 </button>
-
-                <ul class="select-options">
+                <ul class="select-option-lists">
                 </ul>
               </div>
-              <input type="text" class="search-bar" />
-              <div class="search-result-wrapper">
-                <ul class="auto-search-words">
-                </ul>
+              <form class="search">
+                <input type="text" class="search-bar" />
+              </form>
 
-                <ul class="history-search-words">
-                  <li>1</li>
-                  <li>1</li>
+              <div class="search-bottom-wrapper">
+                <div class="auto-search-wrapper">
+                  <ul class="auto-search-lists">
+                  </ul>
+                </div>
+
+                <div class="history-search-wrapper">
+                  <div class="history-search-header"><span>최근 검색어</span></div>
+                  <ul class="history-search-lists">
                 </ul>
+                <div class="history-search-footer">
+                  <button class="history-serach-alldelete-btn">
+                    전체삭제
+                  </button>
+                  <button class="history-serach-close-btn">최근검색어끄기</button>
+                </div>
+                </div>
+
+        
               </div>
             </div>
           </div>
@@ -166,5 +179,5 @@
     </div>
 
   </body>
-  <script type="module" src="../js/app.js"></script>
+  <script type="module" src="./src/js/app.js"></script>
 </html>
