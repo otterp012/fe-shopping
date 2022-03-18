@@ -23,9 +23,17 @@ class Searcher {
   }
 
   addEvent(node, type, eventHandler) {
-    node.addEventListener(`${type}`, (event) => {
-      eventHandler(event);
-    });
+    if (node.length > 1) {
+      node.childNodes.forEach((child) => {
+        child.addEventListener(`${type}`, (event) => {
+          eventHandler(event);
+        });
+      });
+    } else {
+      node.addEventListener(`${type}`, (event) => {
+        eventHandler(event);
+      });
+    }
   }
 }
 
@@ -35,21 +43,24 @@ class SearchHistoryGenerator extends Searcher {
     this.searchHistoryArr = [];
     this.searchFormEl = document.querySelector('.search');
     this.searchInputEl = document.querySelector('.search-bar');
-    this.searchInputValue = this.searchInputEl.value;
     this.searchHistoryListsEl = document.querySelector('.history-search-lists');
     this.historySearchWrapperEl = document.querySelector(
       '.history-search-wrapper'
     );
+    this.historyAllDeleteBtnEl = document.querySelector(
+      '.history-serach-alldelete-btn'
+    );
+    this.searchHistoryCloseBtn = document.querySelector(
+      '.history-serach-close-btn'
+    );
     this.MAX_SEARCH_HISTORY_NUM = 11;
     this.LOCAL_STROAGE_NAME = 'searchHistory';
-    this.DELAY = 2000;
-    this.eventListener();
     this.render();
   }
 
   render() {
     this.searchInputEl.addEventListener('focus', () => {
-      if (!this.searchInputEl.value) {
+      if (!super.hasValue(this.searchInputEl)) {
         super.show(this.historySearchWrapperEl);
       }
     });
@@ -61,6 +72,7 @@ class SearchHistoryGenerator extends Searcher {
     });
 
     this.hideSearchHistory();
+    this.eventListener();
   }
 
   hideSearchHistory() {
@@ -74,17 +86,23 @@ class SearchHistoryGenerator extends Searcher {
 
   eventListener() {
     super.addEvent(
-      this.searchFormEl,
+      document.body,
       'submit',
       this.displaySearchHistory.bind(this)
+    );
+
+    super.addEvent(
+      this.historyAllDeleteBtnEl,
+      'click',
+      this.deleteAllSearchHistory.bind(this)
     );
 
     super.addEvent(document.body, 'click', this.deleteSearchHistory.bind(this));
 
     super.addEvent(
-      document.body,
+      this.searchHistoryCloseBtn,
       'click',
-      this.deleteAllSearchHistory.bind(this)
+      this.closeSearchHistory.bind(this)
     );
   }
 
@@ -108,8 +126,8 @@ class SearchHistoryGenerator extends Searcher {
       this.searchHistoryArr.push(this.searchInputEl.value);
     }
     this.searchInputEl.value = '';
-    this.checkHistoryLength();
     this.searchHistoryArr = this.removeOverlap(this.searchHistoryArr);
+    this.checkHistoryLength();
     this.setSearchHistory(this.LOCAL_STROAGE_NAME, this.searchHistoryArr);
 
     const searchHistory = this.getSearchHistory(this.LOCAL_STROAGE_NAME).reduce(
@@ -149,13 +167,26 @@ class SearchHistoryGenerator extends Searcher {
     }
   }
 
-  deleteAllSearchHistory(event) {
-    if (event.target.className === 'history-serach-alldelete-btn') {
-      this.searchHistoryArr = [];
-      this.setSearchHistory(this.LOCAL_STROAGE_NAME, this.searchHistoryArr);
+  deleteAllSearchHistory() {
+    this.searchHistoryArr = [];
+    this.setSearchHistory(this.LOCAL_STROAGE_NAME, this.searchHistoryArr);
+    this.searchHistoryListsEl.innerHTML = '';
+  }
+
+  closeSearchHistory(event) {
+    if (event.target.textContent === '최근검색어끄기') {
+      this.historySearchWrapperEl.classList.add('close');
+      event.target.textContent = '최근검색어켜기';
+      this.deleteAllSearchHistory();
+      this.searchHistoryListsEl.innerHTML =
+        '<div>최근 검색어 기능이 꺼져있습니다.</div>';
+    } else {
+      this.historySearchWrapperEl.classList.remove('close');
+      event.target.textContent = '최근검색어끄기';
       this.searchHistoryListsEl.innerHTML = '';
     }
   }
+  // 이부분의 상수들을 정리해서 따로 저장해두고자 합니다. 😂
 }
 
 class SearchAutoGenerator extends Searcher {
@@ -167,16 +198,16 @@ class SearchAutoGenerator extends Searcher {
   }
   render() {
     this.searchInputEl.addEventListener('keyup', (e) => {
-      if (e.keyCode !== 13) {
-        this.autoSearchWrapperEl.style.display = 'block';
+      if (!(e.keyCode === 13 && e.keyCode === 40)) {
+        super.show(this.autoSearchWrapperEl);
         this.renderSuggestions(this.searchInputEl.value);
       } else {
-        this.autoSearchWrapperEl.style.display = 'none';
+        super.hide(this.autoSearchWrapperEl);
       }
     });
 
     setInterval(() => {
-      if (!this.searchInputEl.value) {
+      if (!super.hasValue(this.searchInputEl)) {
         this.autoSearchWrapperEl.style.display = 'none';
       }
     });
@@ -200,7 +231,7 @@ class SearchAutoGenerator extends Searcher {
       (suggestion) => suggestion.value
     );
 
-    const suggestionHighLighted = this.highLightWord(suggestionsInfo);
+    const suggestionHighLighted = this.addHighLight(suggestionsInfo);
     const suggestionHTML = suggestionHighLighted.reduce((acc, cur) => {
       return acc + this.template(cur);
     }, '');
@@ -209,7 +240,7 @@ class SearchAutoGenerator extends Searcher {
     document.querySelector('.auto-search-lists').innerHTML += suggestionHTML;
   }
 
-  highLightWord(arr) {
+  addHighLight(arr) {
     return arr.map((item) => {
       const inputValue = this.searchInputEl.value;
       const inputLength = this.searchInputEl.value.length;
