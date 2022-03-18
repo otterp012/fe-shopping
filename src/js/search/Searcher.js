@@ -35,6 +35,16 @@ class Searcher {
       });
     }
   }
+
+  addClassName(node, className) {
+    node.classList.add(className);
+  }
+
+  removeClassName(node, className) {
+    if (node.classList.contains(className)) {
+      node.classList.remove(className);
+    }
+  }
 }
 
 class SearchHistoryGenerator extends Searcher {
@@ -175,13 +185,13 @@ class SearchHistoryGenerator extends Searcher {
 
   closeSearchHistory(event) {
     if (event.target.textContent === '최근검색어끄기') {
-      this.historySearchWrapperEl.classList.add('close');
+      super.addClassName(this.historySearchWrapperEl, 'close');
       event.target.textContent = '최근검색어켜기';
       this.deleteAllSearchHistory();
       this.searchHistoryListsEl.innerHTML =
         '<div>최근 검색어 기능이 꺼져있습니다.</div>';
     } else {
-      this.historySearchWrapperEl.classList.remove('close');
+      super.removeClassName(this.historySearchWrapperEl, 'close');
       event.target.textContent = '최근검색어끄기';
       this.searchHistoryListsEl.innerHTML = '';
     }
