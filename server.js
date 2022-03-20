@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 
-const categoryData = require('./data/data.json');
+const categoryData = require('./src/data/data.json');
 
 const app = express();
 const port = 3000;
