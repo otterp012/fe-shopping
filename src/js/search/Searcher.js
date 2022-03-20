@@ -5,100 +5,144 @@ class Searcher {
     throw 'override!';
   }
 
-  hasValue(node) {
-    return !!node.value;
+  setEvent() {
+    throw 'override!';
   }
 
-  show(node) {
-    node.style.display = 'block';
+  showWindow() {
+    throw 'override!';
   }
 
-  hide(node) {
-    node.style.display = 'none';
-  }
-
-  timer(callback, ms) {
-    setTimeout(() => callback(), ms);
-  }
-
-  addEvent(node, type, eventHandler) {
-    node.addEventListener(`${type}`, (event) => {
-      eventHandler(event);
-    });
-  }
-
-  addClassName(node, className) {
-    node.classList.add(className);
-  }
-
-  removeClassName(node, className) {
-    if (node.classList.contains(className)) {
-      node.classList.remove(className);
-    }
+  hideWindow() {
+    throw 'override!';
   }
 }
 
-class SearchHistoryGenerator extends Searcher {
+const commonView = {
+  hasValue: (node) => {
+    return !!node.value;
+  },
+
+  show: (node) => {
+    node.style.display = 'block';
+  },
+  hide: (node) => {
+    node.style.display = 'none';
+  },
+
+  timer: (callback, ms) => {
+    setTimeout(() => callback(), ms);
+  },
+
+  addEvent: (node, type, eventHandler) => {
+    node.addEventListener(`${type}`, (event) => {
+      eventHandler(event);
+    });
+  },
+
+  addClassName: (node, className) => {
+    node.classList.add(className);
+  },
+
+  removeClassName: (node, className) => {
+    if (node.classList.contains(className)) {
+      node.classList.remove(className);
+    }
+  },
+
+  hasTargetParent: (node, target) => {
+    if (node) {
+      let current = node;
+      while (true) {
+        let parent = current.parentNode;
+        current = parent;
+        if (parent === document.body) return false;
+        if (parent === target) return true;
+      }
+    }
+  },
+
+  isDisplayed: (node) => {
+    return node.style.display === 'none' ? false : true;
+  },
+};
+
+Object.assign(Searcher.prototype, commonView);
+
+function selector(query, start = document.body) {
+  return start.querySelector(`${query}`);
+}
+
+class SearchHistory extends Searcher {
   constructor() {
     super();
     this.searchHistoryArr = [];
-    this.searchFormEl = document.querySelector('.search');
-    this.searchInputEl = document.querySelector('.search-bar');
-    this.searchHistoryListsEl = document.querySelector('.history-search-lists');
-    this.historySearchWrapperEl = document.querySelector(
-      '.history-search-wrapper'
-    );
-    this.historyAllDeleteBtnEl = document.querySelector(
-      '.history-serach-alldelete-btn'
-    );
-    this.searchHistoryCloseBtn = document.querySelector(
-      '.history-serach-close-btn'
-    );
+    this.searchInputEl = selector('.search-bar');
+    this.searchHistoryListsEl = selector('.history-search-lists');
+    this.historySearchWrapperEl = selector('.history-search-wrapper');
     this.MAX_SEARCH_HISTORY_NUM = 11;
     this.LOCAL_STROAGE_NAME = 'searchHistory';
     this.render();
   }
 
   render() {
-    this.searchInputEl.addEventListener('focus', () => {
-      if (!super.hasValue(this.searchInputEl)) {
-        super.show(this.historySearchWrapperEl);
+    this.showWindow();
+    this.hideWindow();
+    this.setEvent();
+    this.arrowDown();
+  }
+
+  showWindow() {
+    this.searchInputEl.addEventListener('focusin', () => {
+      if (!this.hasValue(this.searchInputEl)) {
+        this.show(this.historySearchWrapperEl);
       }
     });
 
-    this.hideSearchHistory();
-    this.eventListener();
-  }
-
-  hideSearchHistory() {
-    setInterval(() => {
-      if (super.hasValue(this.searchInputEl)) {
-        super.hide(this.historySearchWrapperEl);
+    this.searchInputEl.addEventListener('keyup', () => {
+      if (!this.hasValue(this.searchInputEl)) {
+        this.show(this.historySearchWrapperEl);
       }
     });
-    // focusout 이벤트가 필요합니다.
   }
 
-  eventListener() {
-    super.addEvent(
-      document.body,
-      'submit',
-      this.displaySearchHistory.bind(this)
-    );
+  hideWindow() {
+    this.searchInputEl.addEventListener('keyup', (e) => {
+      if (!(e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
+        if (this.hasValue(this.searchInputEl)) {
+          this.hide(this.historySearchWrapperEl);
+        }
+      }
+    });
 
-    super.addEvent(
-      this.historyAllDeleteBtnEl,
-      'click',
-      this.deleteAllSearchHistory.bind(this)
-    );
+    document.addEventListener('click', ({ target }) => {
+      if (target.className !== 'history-delete-btn') {
+        if (!this.hasTargetParent(target, selector('.search-input-wrapper'))) {
+          this.hide(this.historySearchWrapperEl);
+        }
+      }
+    });
+  }
+  // 고생했던 부분-> 이 버튼을 누르면, 버튼의 부모가 지워지게되고
+  // 그러면 hasTargetParent 함수가 동작을 안해서..
+  // 이벤트의 순서를 알아보는 것이 힘들었음.
 
-    super.addEvent(document.body, 'click', this.deleteSearchHistory.bind(this));
+  setEvent() {
+    selector('.search').addEventListener('submit', (event) => {
+      this.displaySearchHistory(event);
+    });
 
-    super.addEvent(
-      this.searchHistoryCloseBtn,
-      'click',
-      this.closeSearchHistory.bind(this)
-    );
+    this.searchHistoryListsEl.addEventListener('click', (event) => {
+      this.deleteSearchHistory(event);
+    });
+
+    selector('.history-serach-alldelete-btn').addEventListener('click', () => {
+      this.deleteAllSearchHistory();
+    });
+
+    selector('.history-serach-onOff-btn').addEventListener('click', (event) => {
+      this.onOffSearchHistoryWindow(event);
+    });
   }
 
   template(str) {
@@ -117,11 +161,11 @@ class SearchHistoryGenerator extends Searcher {
 
   displaySearchHistory(event) {
     event.preventDefault();
-    if (this.searchInputEl.value) {
+    if (this.hasValue(this.searchInputEl)) {
       this.searchHistoryArr.push(this.searchInputEl.value);
     }
     this.searchInputEl.value = '';
-    this.searchHistoryArr = this.removeOverlap(this.searchHistoryArr);
+    this.removeOverlap();
     this.checkHistoryLength();
     this.setSearchHistory(this.LOCAL_STROAGE_NAME, this.searchHistoryArr);
 
@@ -133,7 +177,6 @@ class SearchHistoryGenerator extends Searcher {
     );
 
     this.searchHistoryListsEl.innerHTML = searchHistory;
-    super.show(this.historySearchWrapperEl);
   }
 
   checkHistoryLength() {
@@ -141,15 +184,15 @@ class SearchHistoryGenerator extends Searcher {
       this.searchHistoryArr.shift();
   }
 
-  removeOverlap(arr) {
-    const nonOverlapSet = new Set(arr);
-    return [...nonOverlapSet];
+  removeOverlap() {
+    const nonOverlapSet = new Set(this.searchHistoryArr);
+    this.searchHistoryArr = [...nonOverlapSet];
   }
 
-  deleteSearchHistory(event) {
-    if (event.target.className === 'history-delete-btn') {
-      const filteredText = event.target.textContent;
-      const removedSearchHistory = event.target.parentNode.innerText
+  deleteSearchHistory({ target }) {
+    if (target.className === 'history-delete-btn') {
+      const filteredText = target.textContent;
+      const removedSearchHistory = target.parentNode.innerText
         .split('\n')
         .filter((text) => text !== filteredText);
 
@@ -158,7 +201,7 @@ class SearchHistoryGenerator extends Searcher {
       );
 
       this.setSearchHistory(this.LOCAL_STROAGE_NAME, this.searchHistoryArr);
-      event.target.parentNode.remove();
+      target.parentNode.remove();
     }
   }
 
@@ -168,50 +211,130 @@ class SearchHistoryGenerator extends Searcher {
     this.searchHistoryListsEl.innerHTML = '';
   }
 
-  closeSearchHistory(event) {
-    if (event.target.textContent === '최근검색어끄기') {
-      super.addClassName(this.historySearchWrapperEl, 'close');
-      event.target.textContent = '최근검색어켜기';
+  onOffSearchHistoryWindow({ target }) {
+    if (target.textContent === '최근검색어끄기') {
+      this.addClassName(this.historySearchWrapperEl, 'close');
       this.deleteAllSearchHistory();
+      target.textContent = '최근검색어켜기';
       this.searchHistoryListsEl.innerHTML =
         '<div>최근 검색어 기능이 꺼져있습니다.</div>';
     } else {
-      super.removeClassName(this.historySearchWrapperEl, 'close');
-      event.target.textContent = '최근검색어끄기';
+      this.removeClassName(this.historySearchWrapperEl, 'close');
+      target.textContent = '최근검색어끄기';
       this.searchHistoryListsEl.innerHTML = '';
     }
   }
-  // 이부분의 상수들을 정리해서 따로 저장해두고자 합니다. 😂
+
+  arrowDown() {
+    let count = -1;
+    this.searchInputEl.addEventListener('keyup', (e) => {
+      if (this.isDisplayed(this.historySearchWrapperEl)) {
+        if (e.key === 'ArrowDown') {
+          count++;
+          if (count >= this.searchHistoryArr.length) count = 0;
+          selector('.history-search-lists').childNodes.forEach((list) => {
+            list.classList.remove('focus');
+          });
+          selector('.history-search-lists').childNodes[count].focus();
+          selector('.history-search-lists').childNodes[count].classList.add(
+            'focus'
+          );
+          this.searchInputEl.value = selector('.history-search-lists')
+            .childNodes[count].innerText.split('\n')
+            .filter((value) => value !== '삭제');
+        } else if (e.key === 'ArrowUp') {
+          count--;
+          if (count < 0) count = this.searchHistoryArr.length - 1;
+          selector('.history-search-lists').childNodes.forEach((list) => {
+            list.classList.remove('focus');
+          });
+          selector('.history-search-lists').childNodes[count].focus();
+          selector('.history-search-lists').childNodes[count].classList.add(
+            'focus'
+          );
+          this.searchInputEl.value = selector('.history-search-lists')
+            .childNodes[count].innerText.split('\n')
+            .filter((value) => value !== '삭제');
+        }
+      }
+    });
+  }
 }
 
-class SearchAutoGenerator extends Searcher {
+class SearchAutoComplete extends Searcher {
   constructor() {
     super();
-    this.searchInputEl = document.querySelector('.search-bar');
-    this.autoSearchWrapperEl = document.querySelector('.auto-search-wrapper');
+    this.searchInputEl = selector('.search-bar');
+    this.autoSearchWrapperEl = selector('.auto-search-wrapper');
     this.render();
   }
-  render() {
+
+  showWindow() {
     this.searchInputEl.addEventListener('keyup', (e) => {
-      if (!(e.keyCode === 13 && e.keyCode === 40)) {
-        super.show(this.autoSearchWrapperEl);
+      if (
+        !(e.key === 'Enter' || e.key === 'ArrowDown' || e.key === 'ArrowUp')
+      ) {
+        this.show(this.autoSearchWrapperEl);
         this.renderSuggestions(this.searchInputEl.value);
-      } else {
-        super.hide(this.autoSearchWrapperEl);
       }
+    });
+  }
+
+  hideWindow() {
+    this.searchInputEl.addEventListener('keyup', () => {
+      if (!this.searchInputEl.value) this.hide(this.autoSearchWrapperEl);
     });
 
-    setInterval(() => {
-      if (!super.hasValue(this.searchInputEl)) {
-        this.autoSearchWrapperEl.style.display = 'none';
+    document.addEventListener('click', ({ target }) => {
+      if (!this.hasTargetParent(target, selector('.search-input-wrapper'))) {
+        this.hide(this.autoSearchWrapperEl);
       }
     });
+  }
+
+  render() {
+    this.showWindow();
+    this.hideWindow();
+    this.arrowDown();
   }
 
   template(str) {
     return `<li class="auto-search-list">${str}</li>`;
   }
 
+  arrowDown() {
+    let count = -1;
+    this.searchInputEl.addEventListener('keyup', (e) => {
+      if (this.isDisplayed(this.autoSearchWrapperEl)) {
+        if (e.key === 'ArrowDown') {
+          count++;
+          if (count >= 10) count = 0;
+          selector('.auto-search-lists').childNodes.forEach((list) => {
+            list.classList.remove('focus');
+          });
+          selector('.auto-search-lists').childNodes[count].focus();
+          selector('.auto-search-lists').childNodes[count].classList.add(
+            'focus'
+          );
+          this.searchInputEl.value =
+            selector('.auto-search-lists').childNodes[count].textContent;
+        } else if (e.key === 'ArrowUp') {
+          count--;
+          if (count < 0) count = 9;
+          console.log(count);
+          selector('.auto-search-lists').childNodes.forEach((list) => {
+            list.classList.remove('focus');
+          });
+          selector('.auto-search-lists').childNodes[count].focus();
+          selector('.auto-search-lists').childNodes[count].classList.add(
+            'focus'
+          );
+          this.searchInputEl.value =
+            selector('.auto-search-lists').childNodes[count].textContent;
+        }
+      }
+    });
+  }
   getSuggestions(prefix) {
     return fetch(
       `https://completion.amazon.com/api/2017/suggestions?session-id=133-4736477-7395454&customer-id=&request-id=4YM3EXKRH1QJB16MSJGT&page-type=Gateway&lop=en_US&site-variant=desktop&client-info=amazon-search-ui&mid=ATVPDKIKX0DER&alias=aps&b2b=0&fresh=0&ks=8&prefix=${prefix}&event=onKeyPress&limit=11&fb=1&suggestion-type=KEYWORD`
@@ -226,12 +349,14 @@ class SearchAutoGenerator extends Searcher {
       (suggestion) => suggestion.value
     );
 
-    const suggestionHighLighted = this.addHighLight(suggestionsInfo);
-    const suggestionHTML = suggestionHighLighted.reduce((acc, cur) => {
-      return acc + this.template(cur);
-    }, '');
+    const suggestionHTML = this.addHighLight(suggestionsInfo).reduce(
+      (acc, cur) => {
+        return acc + this.template(cur);
+      },
+      ''
+    );
 
-    document.querySelector('.auto-search-lists').innerHTML = suggestionHTML;
+    selector('.auto-search-lists').innerHTML = suggestionHTML;
   }
 
   addHighLight(arr) {
@@ -249,4 +374,4 @@ class SearchAutoGenerator extends Searcher {
   }
 }
 
-export { SearchHistoryGenerator, SearchAutoGenerator };
+export { SearchHistory, SearchAutoComplete };
