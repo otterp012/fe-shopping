@@ -1,12 +1,9 @@
-import {
-  SearchHistoryGenerator,
-  SearchAutoGenerator,
-} from './search/Searcher.js';
-import { utils } from './utils.js';
+import { SearchHistory, SearchAutoComplete } from './search/Searcher.js';
+import { selector, myFetch } from './utils/utils.js';
 
 function init() {
-  const searchHistory = new SearchHistoryGenerator();
-  const searchAuto = new SearchAutoGenerator();
+  const searchHistory = new SearchHistory();
+  const searchAuto = new SearchAutoComplete();
 }
 
 init();
@@ -19,7 +16,7 @@ const selectOptionListsWrapperEl = document.querySelector(
   '.select-option-lists'
 );
 async function renderFilterOptions() {
-  const filterOptionsJson = await utils.myFetch('/categoryData');
+  const filterOptionsJson = await myFetch('./categoryData');
   const filterOptions = filterOptionsJson.reduce((acc, str) => {
     return acc + `<li class="select-option-list">${str}</li>`;
   }, '');
