@@ -3,6 +3,7 @@ import {
   SearchAutoGenerator,
 } from './search/Searcher.js';
 import { utils } from './utils.js';
+
 function init() {
   const searchHistory = new SearchHistoryGenerator();
   const searchAuto = new SearchAutoGenerator();
@@ -27,13 +28,10 @@ async function renderFilterOptions() {
 }
 renderFilterOptions();
 selectBtnClickEvent();
+
 function selectBtnClickEvent() {
   document.querySelector('.select-btn').addEventListener('click', () => {
-    if (selectOptionListsWrapperEl.classList.contains('active')) {
-      selectOptionListsWrapperEl.classList.remove('active');
-    } else {
-      selectOptionListsWrapperEl.classList.add('active');
-    }
+    selectOptionListsWrapperEl.classList.toggle('active');
   });
 }
 

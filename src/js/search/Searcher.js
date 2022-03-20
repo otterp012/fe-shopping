@@ -6,8 +6,7 @@ class Searcher {
   }
 
   hasValue(node) {
-    if (node.value) return true;
-    return false;
+    return !!node.value;
   }
 
   show(node) {
@@ -23,17 +22,9 @@ class Searcher {
   }
 
   addEvent(node, type, eventHandler) {
-    if (node.length > 1) {
-      node.childNodes.forEach((child) => {
-        child.addEventListener(`${type}`, (event) => {
-          eventHandler(event);
-        });
-      });
-    } else {
-      node.addEventListener(`${type}`, (event) => {
-        eventHandler(event);
-      });
-    }
+    node.addEventListener(`${type}`, (event) => {
+      eventHandler(event);
+    });
   }
 
   addClassName(node, className) {
@@ -71,12 +62,6 @@ class SearchHistoryGenerator extends Searcher {
   render() {
     this.searchInputEl.addEventListener('focus', () => {
       if (!super.hasValue(this.searchInputEl)) {
-        super.show(this.historySearchWrapperEl);
-      }
-    });
-
-    this.searchInputEl.addEventListener('keyup', (event) => {
-      if (event.keyCode == 13) {
         super.show(this.historySearchWrapperEl);
       }
     });
@@ -147,8 +132,8 @@ class SearchHistoryGenerator extends Searcher {
       ''
     );
 
-    this.searchHistoryListsEl.innerHTML = '';
-    this.searchHistoryListsEl.innerHTML += searchHistory;
+    this.searchHistoryListsEl.innerHTML = searchHistory;
+    super.show(this.historySearchWrapperEl);
   }
 
   checkHistoryLength() {
@@ -179,7 +164,7 @@ class SearchHistoryGenerator extends Searcher {
 
   deleteAllSearchHistory() {
     this.searchHistoryArr = [];
-    this.setSearchHistory(this.LOCAL_STROAGE_NAME, this.searchHistoryArr);
+    localStorage.removeItem('this.LOCAL_STROAGE_NAME');
     this.searchHistoryListsEl.innerHTML = '';
   }
 
@@ -246,8 +231,7 @@ class SearchAutoGenerator extends Searcher {
       return acc + this.template(cur);
     }, '');
 
-    document.querySelector('.auto-search-lists').innerHTML = '';
-    document.querySelector('.auto-search-lists').innerHTML += suggestionHTML;
+    document.querySelector('.auto-search-lists').innerHTML = suggestionHTML;
   }
 
   addHighLight(arr) {
