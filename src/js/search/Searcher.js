@@ -1,3 +1,6 @@
+import { selector } from '../utils/utils.js';
+import { View } from '../Veiw.js';
+
 class Searcher {
   constructor() {}
 
@@ -13,65 +16,80 @@ class Searcher {
     throw 'override!';
   }
 
-  hideWindow() {
-    throw 'override!';
+  hideWindow(node, hasvalue) {
+    this.searchInputEl.addEventListener('keyup', (e) => {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') return;
+      if (
+        hasvalue
+          ? this.hasValue(this.searchInputEl)
+          : !this.hasValue(this.searchInputEl)
+      ) {
+        this.hide(node);
+      }
+    });
+
+    document.addEventListener('click', ({ target }) => {
+      if (
+        target.className === 'history-delete-btn' ||
+        this.hasTargetParent(target, selector('.search-input-wrapper'))
+      )
+        return;
+      this.hide(node);
+    });
+  }
+  // 고생했던 부분-> 이 버튼을 누르면, 버튼의 부모가 지워지게되고
+  // 그러면 hasTargetParent 함수가 동작을 안해서..
+  // 이벤트의 순서를 알아보는 것이 힘들었음.
+
+  arrow(displayedWrapper, listsNode, counter) {
+    this.searchInputEl.addEventListener('keyup', (e) => {
+      if (!this.isDisplayed(displayedWrapper)) return;
+      if (e.key === 'ArrowDown') {
+        counter++;
+        if (counter >= listsNode.childNodes.length) counter = 0;
+        listsNode.childNodes.forEach((list) => {
+          list.classList.remove('focus');
+        });
+        listsNode.childNodes[counter].focus();
+        listsNode.childNodes[counter].classList.add('focus');
+
+        this.searchInputEl.value = this.newInputValue(
+          listsNode,
+          counter,
+          '삭제'
+        );
+      } else if (e.key === 'ArrowUp') {
+        counter--;
+        if (counter < 0) counter = listsNode.childNodes.length - 1;
+        listsNode.childNodes.forEach((list) => {
+          list.classList.remove('focus');
+        });
+        listsNode.childNodes[counter].focus();
+        listsNode.childNodes[counter].classList.add('focus');
+
+        // 이부분을 상속으로 줄 것을 염두에 두고, 작성했으나 초기 html 작성에 문제가 있어
+        // searchhistory부분은 특정 text를 삭제해주어야 합니다.
+        // 가능하면 완전 공통적인 로직으로 수정하고 싶습니다 😂
+        this.searchInputEl.value = this.newInputValue(
+          listsNode,
+          counter,
+          '삭제'
+        );
+      }
+    });
+  }
+
+  newInputValue(node, counter, filterText = '') {
+    if (filterText) {
+      return node.childNodes[counter].innerText
+        .split('\n')
+        .filter((text) => text !== filterText);
+    }
+    return node.childNodes[counter].innerText;
   }
 }
 
-const commonView = {
-  hasValue: (node) => {
-    return !!node.value;
-  },
-
-  show: (node) => {
-    node.style.display = 'block';
-  },
-  hide: (node) => {
-    node.style.display = 'none';
-  },
-
-  timer: (callback, ms) => {
-    setTimeout(() => callback(), ms);
-  },
-
-  addEvent: (node, type, eventHandler) => {
-    node.addEventListener(`${type}`, (event) => {
-      eventHandler(event);
-    });
-  },
-
-  addClassName: (node, className) => {
-    node.classList.add(className);
-  },
-
-  removeClassName: (node, className) => {
-    if (node.classList.contains(className)) {
-      node.classList.remove(className);
-    }
-  },
-
-  hasTargetParent: (node, target) => {
-    if (node) {
-      let current = node;
-      while (true) {
-        let parent = current.parentNode;
-        current = parent;
-        if (parent === document.body) return false;
-        if (parent === target) return true;
-      }
-    }
-  },
-
-  isDisplayed: (node) => {
-    return node.style.display === 'none' ? false : true;
-  },
-};
-
-Object.assign(Searcher.prototype, commonView);
-
-function selector(query, start = document.body) {
-  return start.querySelector(`${query}`);
-}
+Object.assign(Searcher.prototype, View);
 
 class SearchHistory extends Searcher {
   constructor() {
@@ -82,18 +100,23 @@ class SearchHistory extends Searcher {
     this.historySearchWrapperEl = selector('.history-search-wrapper');
     this.MAX_SEARCH_HISTORY_NUM = 11;
     this.LOCAL_STROAGE_NAME = 'searchHistory';
+    this.listsCounter = -1;
     this.render();
   }
 
   render() {
     this.showWindow();
-    this.hideWindow();
+    this.hideWindow(this.historySearchWrapperEl, true);
     this.setEvent();
-    this.arrowDown();
+    this.arrow(
+      this.historySearchWrapperEl,
+      this.searchHistoryListsEl,
+      this.listsCounter
+    );
   }
 
   showWindow() {
-    this.searchInputEl.addEventListener('focusin', () => {
+    this.searchInputEl.addEventListener('focus', () => {
       if (!this.hasValue(this.searchInputEl)) {
         this.show(this.historySearchWrapperEl);
       }
@@ -105,27 +128,6 @@ class SearchHistory extends Searcher {
       }
     });
   }
-
-  hideWindow() {
-    this.searchInputEl.addEventListener('keyup', (e) => {
-      if (!(e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
-        if (this.hasValue(this.searchInputEl)) {
-          this.hide(this.historySearchWrapperEl);
-        }
-      }
-    });
-
-    document.addEventListener('click', ({ target }) => {
-      if (target.className !== 'history-delete-btn') {
-        if (!this.hasTargetParent(target, selector('.search-input-wrapper'))) {
-          this.hide(this.historySearchWrapperEl);
-        }
-      }
-    });
-  }
-  // 고생했던 부분-> 이 버튼을 누르면, 버튼의 부모가 지워지게되고
-  // 그러면 hasTargetParent 함수가 동작을 안해서..
-  // 이벤트의 순서를 알아보는 것이 힘들었음.
 
   setEvent() {
     selector('.search').addEventListener('submit', (event) => {
@@ -161,6 +163,9 @@ class SearchHistory extends Searcher {
 
   displaySearchHistory(event) {
     event.preventDefault();
+    if (this.historySearchWrapperEl.classList.contains('close')) {
+      return;
+    }
     if (this.hasValue(this.searchInputEl)) {
       this.searchHistoryArr.push(this.searchInputEl.value);
     }
@@ -224,41 +229,6 @@ class SearchHistory extends Searcher {
       this.searchHistoryListsEl.innerHTML = '';
     }
   }
-
-  arrowDown() {
-    let count = -1;
-    this.searchInputEl.addEventListener('keyup', (e) => {
-      if (this.isDisplayed(this.historySearchWrapperEl)) {
-        if (e.key === 'ArrowDown') {
-          count++;
-          if (count >= this.searchHistoryArr.length) count = 0;
-          selector('.history-search-lists').childNodes.forEach((list) => {
-            list.classList.remove('focus');
-          });
-          selector('.history-search-lists').childNodes[count].focus();
-          selector('.history-search-lists').childNodes[count].classList.add(
-            'focus'
-          );
-          this.searchInputEl.value = selector('.history-search-lists')
-            .childNodes[count].innerText.split('\n')
-            .filter((value) => value !== '삭제');
-        } else if (e.key === 'ArrowUp') {
-          count--;
-          if (count < 0) count = this.searchHistoryArr.length - 1;
-          selector('.history-search-lists').childNodes.forEach((list) => {
-            list.classList.remove('focus');
-          });
-          selector('.history-search-lists').childNodes[count].focus();
-          selector('.history-search-lists').childNodes[count].classList.add(
-            'focus'
-          );
-          this.searchInputEl.value = selector('.history-search-lists')
-            .childNodes[count].innerText.split('\n')
-            .filter((value) => value !== '삭제');
-        }
-      }
-    });
-  }
 }
 
 class SearchAutoComplete extends Searcher {
@@ -266,75 +236,36 @@ class SearchAutoComplete extends Searcher {
     super();
     this.searchInputEl = selector('.search-bar');
     this.autoSearchWrapperEl = selector('.auto-search-wrapper');
+    this.autoSearchLists = selector('.auto-search-lists');
+    this.listsCounter = -1;
     this.render();
   }
 
   showWindow() {
     this.searchInputEl.addEventListener('keyup', (e) => {
-      if (
-        !(e.key === 'Enter' || e.key === 'ArrowDown' || e.key === 'ArrowUp')
-      ) {
-        this.show(this.autoSearchWrapperEl);
-        this.renderSuggestions(this.searchInputEl.value);
+      if (e.key === 'Enter' || e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        return;
       }
-    });
-  }
 
-  hideWindow() {
-    this.searchInputEl.addEventListener('keyup', () => {
-      if (!this.searchInputEl.value) this.hide(this.autoSearchWrapperEl);
-    });
-
-    document.addEventListener('click', ({ target }) => {
-      if (!this.hasTargetParent(target, selector('.search-input-wrapper'))) {
-        this.hide(this.autoSearchWrapperEl);
-      }
+      this.show(this.autoSearchWrapperEl);
+      this.renderSuggestions(this.searchInputEl.value);
     });
   }
 
   render() {
     this.showWindow();
-    this.hideWindow();
-    this.arrowDown();
+    this.hideWindow(this.autoSearchWrapperEl, false);
+    this.arrow(
+      this.autoSearchWrapperEl,
+      this.autoSearchLists,
+      this.listsCounter
+    );
   }
 
   template(str) {
     return `<li class="auto-search-list">${str}</li>`;
   }
 
-  arrowDown() {
-    let count = -1;
-    this.searchInputEl.addEventListener('keyup', (e) => {
-      if (this.isDisplayed(this.autoSearchWrapperEl)) {
-        if (e.key === 'ArrowDown') {
-          count++;
-          if (count >= 10) count = 0;
-          selector('.auto-search-lists').childNodes.forEach((list) => {
-            list.classList.remove('focus');
-          });
-          selector('.auto-search-lists').childNodes[count].focus();
-          selector('.auto-search-lists').childNodes[count].classList.add(
-            'focus'
-          );
-          this.searchInputEl.value =
-            selector('.auto-search-lists').childNodes[count].textContent;
-        } else if (e.key === 'ArrowUp') {
-          count--;
-          if (count < 0) count = 9;
-          console.log(count);
-          selector('.auto-search-lists').childNodes.forEach((list) => {
-            list.classList.remove('focus');
-          });
-          selector('.auto-search-lists').childNodes[count].focus();
-          selector('.auto-search-lists').childNodes[count].classList.add(
-            'focus'
-          );
-          this.searchInputEl.value =
-            selector('.auto-search-lists').childNodes[count].textContent;
-        }
-      }
-    });
-  }
   getSuggestions(prefix) {
     return fetch(
       `https://completion.amazon.com/api/2017/suggestions?session-id=133-4736477-7395454&customer-id=&request-id=4YM3EXKRH1QJB16MSJGT&page-type=Gateway&lop=en_US&site-variant=desktop&client-info=amazon-search-ui&mid=ATVPDKIKX0DER&alias=aps&b2b=0&fresh=0&ks=8&prefix=${prefix}&event=onKeyPress&limit=11&fb=1&suggestion-type=KEYWORD`
