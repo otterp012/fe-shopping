@@ -1,4 +1,4 @@
-import { selector } from '../utils/utils.js';
+import { selector, debounce } from '../utils/utils.js';
 import { View } from '../Veiw.js';
 
 class Searcher {
@@ -42,9 +42,9 @@ class Searcher {
   // 이벤트의 순서를 알아보는 것이 힘들었음.
 
   arrow(displayedWrapper, listsNode, counter) {
-    this.searchInputEl.addEventListener('keyup', (e) => {
+    this.searchInputEl.addEventListener('keyup', ({ key }) => {
       if (!this.isDisplayed(displayedWrapper)) return;
-      if (e.key === 'ArrowDown') {
+      if (key === 'ArrowDown') {
         counter++;
         if (counter >= listsNode.childNodes.length) counter = 0;
         listsNode.childNodes.forEach((list) => {
@@ -58,7 +58,7 @@ class Searcher {
           counter,
           '삭제'
         );
-      } else if (e.key === 'ArrowUp') {
+      } else if (key === 'ArrowUp') {
         counter--;
         if (counter < 0) counter = listsNode.childNodes.length - 1;
         listsNode.childNodes.forEach((list) => {
@@ -242,19 +242,32 @@ class SearchAutoComplete extends Searcher {
   }
 
   showWindow() {
-    this.searchInputEl.addEventListener('keyup', (e) => {
-      if (e.key === 'Enter' || e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+    this.searchInputEl.addEventListener('keyup', ({ key }) => {
+      if (key === 'Enter' || key === 'ArrowDown' || key === 'ArrowUp') {
         return;
       }
-
       this.show(this.autoSearchWrapperEl);
-      this.renderSuggestions(this.searchInputEl.value);
+      // const debounceRender = debounce(
+      //   (e) => this.renderSuggestions(e.target.value),
+      //   500
+      // );
+      // debounceRender();
     });
+
+    // 콜백안에서 디바운스 실행시키면 제대로 안먹힘
+  }
+
+  setEvent() {
+    this.searchInputEl.addEventListener(
+      'keyup',
+      debounce((e) => this.renderSuggestions(e.target.value), 500)
+    );
   }
 
   render() {
     this.showWindow();
     this.hideWindow(this.autoSearchWrapperEl, false);
+    this.setEvent();
     this.arrow(
       this.autoSearchWrapperEl,
       this.autoSearchLists,
@@ -280,14 +293,14 @@ class SearchAutoComplete extends Searcher {
       (suggestion) => suggestion.value
     );
 
-    const suggestionHTML = this.addHighLight(suggestionsInfo).reduce(
+    const suggestionsHTML = this.addHighLight(suggestionsInfo).reduce(
       (acc, cur) => {
         return acc + this.template(cur);
       },
       ''
     );
 
-    selector('.auto-search-lists').innerHTML = suggestionHTML;
+    this.autoSearchLists.innerHTML = suggestionsHTML;
   }
 
   addHighLight(arr) {
