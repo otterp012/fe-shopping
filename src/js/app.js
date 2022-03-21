@@ -1,4 +1,4 @@
-import { SearchHistory, SearchAutoComplete } from './search/Searcher.js';
+import { SearchHistory, SearchAutoComplete } from './view/Searcher.js';
 import { selector, myFetch } from './utils/utils.js';
 
 function init() {

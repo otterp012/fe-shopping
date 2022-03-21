@@ -1,5 +1,5 @@
 import { selector, debounce } from '../utils/utils.js';
-import { View } from '../Veiw.js';
+import { View } from './Veiw.js';
 
 class Searcher {
   constructor() {}
