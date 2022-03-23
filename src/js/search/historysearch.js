@@ -102,7 +102,7 @@ class SearchHistoryController extends SearchController {
       const newState = this.model.getState('historySearchLists');
       this.model.setSearchHistory(this.LOCAL_STRAGE_NAME, newState);
       this.setState({
-        historySearchLists: this.model.getSearchHistory(this.LOCAL_STRAGE_NAME),
+        historySearchLists: newState,
       });
       this.searchInputEl.value = '';
     });
@@ -124,9 +124,7 @@ class SearchHistoryController extends SearchController {
 
           this.model.setSearchHistory(this.LOCAL_STRAGE_NAME, newState);
           this.setState({
-            historySearchLists: this.model.getSearchHistory(
-              this.LOCAL_STRAGE_NAME
-            ),
+            historySearchLists: newState,
           });
           target.parentNode.remove();
         }
@@ -153,9 +151,7 @@ class SearchHistoryController extends SearchController {
           const newState = [];
           this.model.setSearchHistory(this.LOCAL_STRAGE_NAME, newState);
           this.setState({
-            historySearchLists: this.model.getSearchHistory(
-              this.LOCAL_STRAGE_NAME
-            ),
+            historySearchLists: newState,
           });
 
           target.textContent = '최근검색어켜기';
