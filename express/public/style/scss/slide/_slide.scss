@@ -1,0 +1,37 @@
+.slide-section {
+  position: relative;
+  width: 950px;
+  margin: 0 auto;
+  margin-top: 130px;
+  .image-box {
+    position: relative;
+    overflow: hidden;
+    transform: translateY(-50%);
+    transform: translateX(-50%);
+    height: 400px;
+    width: 950px;
+    left: 50%;
+    .image-container {
+      position: absolute;
+      top: -400px;
+      .image-element {
+        float: left;
+      }
+    }
+  }
+}
+
+.slide-tab-box {
+  position: absolute;
+  height: 330px;
+  width: 200px;
+  right: 30px;
+  top: 30px;
+  .slide-tab-container {
+    position: absolute;
+    .side-tab-element {
+      border: 1px solid $color-black;
+      border-bottom: 0.5px solid $color-black;
+    }
+  }
+}
