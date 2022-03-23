@@ -41,7 +41,7 @@ class Searcher {
   // 그러면 hasTargetParent 함수가 동작을 안해서..
   // 이벤트의 순서를 알아보는 것이 힘들었음.
 
-  arrow(displayedWrapper, listsNode, counter) {
+  setArrowKeyEvent(displayedWrapper, listsNode, counter) {
     this.searchInputEl.addEventListener('keyup', ({ key }) => {
       if (!this.isDisplayed(displayedWrapper)) return;
       if (key === 'ArrowDown') {
@@ -108,11 +108,6 @@ class SearchHistory extends Searcher {
     this.showWindow();
     this.hideWindow(this.historySearchWrapperEl, true);
     this.setEvent();
-    this.arrow(
-      this.historySearchWrapperEl,
-      this.searchHistoryListsEl,
-      this.listsCounter
-    );
   }
 
   showWindow() {
@@ -145,6 +140,12 @@ class SearchHistory extends Searcher {
     selector('.history-serach-onOff-btn').addEventListener('click', (event) => {
       this.onOffSearchHistoryWindow(event);
     });
+
+    this.setArrowKeyEvent(
+      this.historySearchWrapperEl,
+      this.searchHistoryListsEl,
+      this.listsCounter
+    );
   }
 
   template(str) {
@@ -262,17 +263,17 @@ class SearchAutoComplete extends Searcher {
       'keyup',
       debounce((e) => this.renderSuggestions(e.target.value), 500)
     );
+    this.setArrowKeyEvent(
+      this.autoSearchWrapperEl,
+      this.autoSearchLists,
+      this.listsCounter
+    );
   }
 
   render() {
     this.showWindow();
     this.hideWindow(this.autoSearchWrapperEl, false);
     this.setEvent();
-    this.arrow(
-      this.autoSearchWrapperEl,
-      this.autoSearchLists,
-      this.listsCounter
-    );
   }
 
   template(str) {
