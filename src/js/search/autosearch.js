@@ -43,12 +43,12 @@ class AutocompleteView extends View {
     selector('.auto-search-lists').innerHTML = this.template(highLightedLists);
   };
 
-  highLightList(arr, targetValue) {
+  highLightList = (arr, targetValue) => {
     return arr.map(
       (list) =>
         (list = list.replace(targetValue, `<strong>${targetValue}</strong>`))
     );
-  }
+  };
 }
 
 class AutocompleteCotroller extends SearchController {
@@ -72,7 +72,7 @@ class AutocompleteCotroller extends SearchController {
     this.view.render(state);
   };
 
-  setEvents() {
+  setEvents = () => {
     this.displayAutoCompleteLists();
     this.showWindow(this.autoSearchWrapperEl, true);
     this.hideWindow(this.autoSearchWrapperEl, false);
@@ -81,7 +81,7 @@ class AutocompleteCotroller extends SearchController {
       this.autoSearchListsEl,
       this.listsCounter
     );
-  }
+  };
 
   displayAutoCompleteLists = () => {
     this.searchInputEl.addEventListener(

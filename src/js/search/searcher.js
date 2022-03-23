@@ -31,7 +31,7 @@ class SearchController extends Controller {
     });
   };
 
-  hideWindow(node, hasValue) {
+  hideWindow = (node, hasValue) => {
     this.searchInputEl.addEventListener('keyup', (e) => {
       if (e.key === 'ArrowDown' || e.key === 'ArrowUp') return;
       if (
@@ -51,9 +51,9 @@ class SearchController extends Controller {
         return;
       this.hide(node);
     });
-  }
+  };
 
-  setArrowKeyEvent(displayedWrapper, listsNode, counter) {
+  setArrowKeyEvent = (displayedWrapper, listsNode, counter) => {
     this.searchInputEl.addEventListener('keyup', ({ key }) => {
       if (!this.isDisplayed(displayedWrapper)) return;
       if (key === 'ArrowDown') {
@@ -89,14 +89,14 @@ class SearchController extends Controller {
         );
       }
     });
-  }
+  };
 
-  newInputValue(node, counter, filterText = '') {
+  newInputValue = (node, counter, filterText = '') => {
     if (filterText) {
       return node.childNodes[counter].innerText
         .split('\n')
         .filter((text) => text !== filterText);
     }
     return node.childNodes[counter].innerText;
-  }
+  };
 }

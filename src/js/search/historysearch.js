@@ -36,9 +36,9 @@ class SearchHistoryModel extends Model {
   // 데이터를 정제하는 것을 여기서 하려고 하니까 로직이 좀 이상해진 거 같은데
   // 여기서 하는 것이 맞겠죠?
 
-  getSearchHistory(localStorageName) {
+  getSearchHistory = (localStorageName) => {
     return JSON.parse(localStorage.getItem(`${localStorageName}`));
-  }
+  };
 
   setSearchHistory = (localStorageName, state) => {
     localStorage.setItem(`${localStorageName}`, JSON.stringify(state));
@@ -81,7 +81,7 @@ class SearchHistoryController extends SearchController {
     this.showWindow(this.historySearchWrapperEl, false);
     this.hideWindow(this.historySearchWrapperEl, true);
     this.deleteSearchHistory();
-    this.deleteAllSratchHistory();
+    this.deleteAllSearchHistory();
     this.onOffSearchHistoryWindow();
     this.setArrowKeyEvent(
       this.historySearchWrapperEl,
@@ -134,7 +134,7 @@ class SearchHistoryController extends SearchController {
     );
   };
 
-  deleteAllSratchHistory = () => {
+  deleteAllSearchHistory = () => {
     selector('.history-serach-alldelete-btn').addEventListener('click', () => {
       const newState = [];
       this.model.setSearchHistory(this.LOCAL_STRAGE_NAME, newState);
