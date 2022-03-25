@@ -1,20 +1,19 @@
-import {
-  AutocompleteModel,
-  AutocompleteView,
-  AutocompleteCotroller,
-} from './search/autosearch.js';
-import {
-  SearchHistoryModel,
-  SearchHistoryView,
-  SearchHistoryController,
-} from './search/historysearch.js';
+import { AutoCompleteSearchCotroller } from '../js/search/AutocompleteSearch/AutoCompleteSearchCotroller.js';
+import { AutoCompleteSearchModel } from '../js/search/AutocompleteSearch/AutoCompleteSearchModel.js';
+import { AutoCompleteSearchView } from '../js/search/AutocompleteSearch/AutoCompleteSearchView.js';
+import { HistorySearchController } from '../js/search/HistorySearch/HistorySearchController.js';
+import { HistorySearchModel } from '../js/search/HistorySearch/HistorySearchModel.js';
+import { HistorySearchView } from '../js/search/HistorySearch/HistorySearchView.js';
 
 function init() {
-  new AutocompleteCotroller(new AutocompleteModel(), new AutocompleteView());
+  new AutoCompleteSearchCotroller(
+    new AutoCompleteSearchModel(),
+    new AutoCompleteSearchView()
+  );
 
-  new SearchHistoryController(
-    new SearchHistoryModel(),
-    new SearchHistoryView()
+  new HistorySearchController(
+    new HistorySearchModel(),
+    new HistorySearchView()
   );
 }
 
