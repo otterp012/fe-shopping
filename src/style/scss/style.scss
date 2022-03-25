@@ -1,0 +1,310 @@
+$main-color: #4185f5;
+$top-bar-bg-color: #f0f0f0;
+$border-color: #dddddd;
+@import './mixins';
+
+.top-bar-wrapper {
+  background-color: $top-bar-bg-color;
+  @include flex();
+
+  .top-bar {
+    width: 1000px;
+    height: 35px;
+    @include flex($justify-content: space-between);
+
+    div {
+      padding: 0 10px;
+      font-size: 0.6em;
+
+      span {
+        margin-left: 5px;
+      }
+
+      i {
+        margin-left: 3px;
+      }
+    }
+  }
+}
+
+.header-wrapper {
+  @include flex();
+
+  header {
+    @include flex($justify-content: space-between);
+    width: 1000px;
+    height: 115px;
+
+    .category-btn {
+      @include flex($flex-direction: column);
+      width: 110px;
+      height: 100%;
+      background-color: $main-color;
+      color: #fff;
+
+      i {
+        font-size: 1.6em;
+        margin-bottom: 10px;
+      }
+
+      span {
+        font-size: 0.8em;
+      }
+    }
+
+    .header-main-wrapper {
+      width: 760px;
+      padding-left: 10px;
+      margin-top: 30px;
+    }
+  }
+}
+
+.logo-search-wrapper {
+  width: 750px;
+  @include flex($justify-content: space-around);
+  img {
+    width: 190px;
+    height: 45px;
+  }
+
+  .search-wrapper {
+    @include flex();
+    @include border();
+    position: relative;
+    width: 495px;
+    height: 40px;
+
+    .select-btn-wrapper {
+      @include flex();
+      position: relative;
+      height: 40px;
+      border: {
+        top: none;
+        bottom: none;
+        left: none;
+        right: #eeeeee 1px solid;
+      }
+      box-sizing: border-box;
+      @include focusOutline();
+
+      .select-btn {
+        @include flex($justify-content: space-between);
+        width: 135px;
+        height: 100%;
+        padding: 10px;
+      }
+      .select-option-lists {
+        display: none;
+        position: absolute;
+        top: 40px;
+        left: 0;
+        height: 720px;
+        width: 135px;
+        border-top: #eeeeee 1px solid;
+        padding-top: 10px;
+        background-color: #fff;
+        overflow: scroll;
+        &.active {
+          display: list-item;
+        }
+        .select-option-list {
+          @include flex($justify-content: start);
+          padding: 10px;
+          font-size: 0.7em;
+          z-index: 1;
+
+          &:hover {
+            cursor: pointer;
+          }
+        }
+      }
+    }
+
+    .search-input-wrapper {
+      width: 100%;
+      height: 34px;
+      padding: 10px;
+      border: none;
+
+      .search {
+        height: 100%;
+      }
+      .search-bar {
+        width: 100%;
+        height: 100%;
+        border: none;
+        @include focusOutline();
+      }
+    }
+  }
+}
+
+.search-bottom-wrapper {
+  position: absolute;
+  top: 40px;
+  right: 5px;
+  z-index: 1;
+  height: 280px;
+  width: 355px;
+
+  .history-search-wrapper {
+    @include border($color: $border-color, $px: 1px);
+    display: none;
+    padding: 5px;
+    background-color: #fff;
+    width: calc(100% - 5px);
+    height: calc(100% + 20px);
+    &.close {
+      height: 70%;
+    }
+    .history-search-header {
+      @include flex($justify-content: start);
+      height: 35px;
+      padding: 5px;
+      font-size: 0.7em;
+      font-weight: 700;
+      box-sizing: border-box;
+      border-bottom: 1px solid $border-color;
+      margin-bottom: 5px;
+    }
+    .history-search-lists {
+      padding: 5px;
+      height: calc(100% - 80px);
+      font-size: 0.8em;
+      .history-search-list {
+        @include flex($justify-content: space-between);
+        margin-bottom: 10px;
+        &.focus {
+          background-color: red;
+        }
+        .history-delete-btn {
+          margin-right: 10px;
+        }
+      }
+    }
+    .history-search-footer {
+      padding: 5px;
+      height: 30px;
+      border-top: 1px solid $border-color;
+      background-color: #f5f5f5;
+      box-sizing: border-box;
+      font-size: 0.8em;
+      @include flex($justify-content: space-between);
+      button {
+        color: #898989;
+      }
+    }
+  }
+
+  .auto-search-wrapper {
+    background-color: #fff;
+    width: 100%;
+    height: 100%;
+    display: none;
+
+    .auto-search-lists {
+      padding: 10px 20px;
+      font-size: 0.8em;
+
+      .auto-search-list {
+        margin-bottom: 10px;
+        strong {
+          color: $main-color;
+          font-weight: 700;
+        }
+        &.focus {
+          background-color: red;
+        }
+      }
+    }
+  }
+}
+
+.header-nav-wrapper {
+  @include flex($justify-content: space-between);
+  height: 40px;
+  margin: 10px;
+  font-size: 0.9em;
+
+  ul {
+    @include flex($justify-content: space-around);
+    .newIcon {
+      width: 15px;
+    }
+
+    img {
+      margin-right: 3px;
+    }
+  }
+
+  li {
+    @include flex();
+    margin-right: 5px;
+  }
+  .rocket {
+    .rocket-icon-wrapper {
+      position: relative;
+      width: 25px;
+      height: 25px;
+      overflow: hidden;
+
+      .rocketIcon {
+        position: absolute;
+        top: -117px;
+      }
+    }
+  }
+}
+
+.header-footer {
+  @include flex($justify-content: space-around);
+  width: 150px;
+  height: 100%;
+
+  .my-page {
+    @include flex($flex-direction: column);
+  }
+
+  .basket {
+    @include flex($flex-direction: column);
+  }
+  i {
+    font-size: 40px;
+    margin-bottom: 10px;
+  }
+
+  span {
+    font-size: 0.8em;
+  }
+}
+
+.banner-wrapper {
+  height: 450px;
+  @include flex();
+  .banner {
+    position: relative;
+    z-index: -1;
+  }
+
+  .banner-thumnails-wrapper {
+    position: absolute;
+    top: 30px;
+    right: 400px;
+    z-index: 1;
+  }
+
+  .banner-thumnail {
+    img {
+      width: 180px;
+      height: 60px;
+      vertical-align: bottom;
+    }
+    &.active {
+      img {
+        @include border();
+        box-sizing: border-box;
+      }
+    }
+  }
+}
