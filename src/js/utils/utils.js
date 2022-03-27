@@ -43,6 +43,9 @@ const debounce = (func, timeout) => {
   };
 };
 
+class LocalStorage {
+  constructor() {}
+}
 export {
   selector,
   hasTargetParent,
