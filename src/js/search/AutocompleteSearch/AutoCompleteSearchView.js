@@ -52,7 +52,10 @@ class AutoCompleteSearchView extends View {
   renderAutoCompleteLists = () => {
     this.searchInputEl.addEventListener(
       'keyup',
-      debounce(() => this.renderAutoCompleteListsHandler(), 500)
+      debounce(
+        () => this.renderAutoCompleteListsHandler(this.searchInputEl.value),
+        500
+      )
     );
   };
 }

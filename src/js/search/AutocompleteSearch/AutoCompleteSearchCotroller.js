@@ -22,9 +22,8 @@ class AutoCompleteSearchCotroller extends Controller {
       this.clickEventHandlerForDisplayOff.bind(this);
   };
 
-  renderAutoCompleteListsHandler = async () => {
+  renderAutoCompleteListsHandler = async (newInputValue) => {
     const beforeInputValue = this.model.getState('searchInputValue');
-    const newInputValue = this.view.searchInputEl.value.trim();
     const isAutoCompleteViewDisplayed = this.model.getState('isDisplayed');
 
     if (beforeInputValue === newInputValue || !isAutoCompleteViewDisplayed) {
