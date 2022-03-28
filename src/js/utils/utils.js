@@ -5,12 +5,12 @@ const selector = (query, start = document.body) => {
 const hasTargetParent = (node, target) => {
   if (node) {
     let current = node;
-    while (true) {
+    while (current !== document.body) {
+      if (current === target) return true;
       let parent = current.parentNode;
       current = parent;
-      if (parent === document.body) return false;
-      if (parent === target) return true;
     }
+    return false;
   }
 };
 

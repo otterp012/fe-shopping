@@ -34,9 +34,7 @@ class AutoCompleteSearchView extends View {
   };
 
   onOffView = (state) => {
-    state
-      ? (this.autoSearchWrapperEl.style.display = 'block')
-      : (this.autoSearchWrapperEl.style.display = 'none');
+    this.historySearchWrapperEl.style.display = state ? 'block' : 'none';
   };
 
   onOffAutoCompleteDisplay = () => {
