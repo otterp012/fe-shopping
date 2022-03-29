@@ -9,10 +9,6 @@ class AutoCompleteSearchCotroller extends Controller {
     this.setEvents();
   }
 
-  setState = (newState) => {
-    this.model.setState(newState);
-  };
-
   setEvents = () => {
     this.view.renderAutoCompleteListsHandler =
       this.renderAutoCompleteListsHandler.bind(this);
@@ -47,10 +43,10 @@ class AutoCompleteSearchCotroller extends Controller {
 
     if (hasValue(e.target)) {
       this.setState({ isDisplayed: true });
-      this.view.onOffView(this.model.getState('isDisplayed'));
+      this.view.convertDisplayProperty(this.model.getState('isDisplayed'));
     } else {
       this.setState({ isDisplayed: false });
-      this.view.onOffView(this.model.getState('isDisplayed'));
+      this.view.convertDisplayProperty(this.model.getState('isDisplayed'));
     }
   };
 
@@ -58,7 +54,7 @@ class AutoCompleteSearchCotroller extends Controller {
     if (!this.model.getState('isDisplayed')) return;
     if (hasTargetParent(target, node)) return;
     this.setState({ isDisplayed: false });
-    this.view.onOffView(this.model.getState('isDisplayed'));
+    this.view.convertDisplayProperty(this.model.getState('isDisplayed'));
   };
 }
 
