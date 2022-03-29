@@ -8,15 +8,30 @@ class HistorySearchModel extends Model {
 
   setUp = () => {
     this.state = {
-      historySearchLists: [],
+      historySearchLists: this.initHistorySearchLists(),
       searchInputValue: null,
       removedSearchHistoryList: null,
       isDisplayed: false,
       isSearchHistoryOn: true,
       MAX_SEARCH_HISTORY_NUM: 10,
+      localStorage: localStorage,
+      LOCAL_STROAGE_NAME: 'historySearchStorage',
     };
 
-    Object.defineProperty(this.state, 'searchInputValue', {
+    Object.defineProperty(
+      this.state,
+      'searchInputValue',
+      this.searchInputGetterSetter()
+    );
+    Object.defineProperty(
+      this.state,
+      'removedSearchHistoryList',
+      this.RemoveListsGetterSetter()
+    );
+  };
+
+  searchInputGetterSetter = () => {
+    return {
       get() {
         return this._searchInputValue;
       },
@@ -27,12 +42,17 @@ class HistorySearchModel extends Model {
         if (this.historySearchLists.length > this.MAX_SEARCH_HISTORY_NUM) {
           this.historySearchLists.shift();
         }
-
+        this.localStorage.setItem(
+          this.LOCAL_STROAGE_NAME,
+          JSON.stringify(this.historySearchLists)
+        );
         this._searchInputValue = value;
       },
-    });
+    };
+  };
 
-    Object.defineProperty(this.state, 'removedSearchHistoryList', {
+  RemoveListsGetterSetter = () => {
+    return {
       get() {
         return this._removedSearchHistoryList;
       },
@@ -41,20 +61,19 @@ class HistorySearchModel extends Model {
         this.historySearchLists = this.historySearchLists.filter(
           (list) => list !== value.toString()
         );
+        this.localStorage.setItem(
+          this.LOCAL_STROAGE_NAME,
+          JSON.stringify(this.historySearchLists)
+        );
         this._removedSearchHistoryList = value;
       },
-    });
+    };
+  };
 
-    Object.defineProperty(this.state, 'isSearchHistoryOn', {
-      get() {
-        return this._isSearchHistoryOn;
-      },
-
-      set(value) {
-        value ? this.historySearchLists : (this.historySearchLists = []);
-        this._isSearchHistoryOn = value;
-      },
-    });
+  initHistorySearchLists = () => {
+    return JSON.parse(localStorage.getItem('historySearchStorage'))
+      ? JSON.parse(localStorage.getItem('historySearchStorage'))
+      : [];
   };
 }
 
