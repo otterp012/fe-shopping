@@ -1,7 +1,6 @@
-import { Controller } from '../../core/core.js';
-import { hasTargetParent, hasValue } from '../../utils/utils.js';
+import { SearchController } from '../Search/SearchController.js';
 
-class AutoCompleteSearchCotroller extends Controller {
+class AutoCompleteSearchCotroller extends SearchController {
   constructor(model, view) {
     super();
     this.model = model;
@@ -34,27 +33,6 @@ class AutoCompleteSearchCotroller extends Controller {
       searchInputValue: newInputValue,
     });
     this.view.render(this.model.getState('promiseAutocompleteLists'));
-  };
-
-  keyUpEventHandlerForDisplayOnOff = (e) => {
-    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-      return;
-    }
-
-    if (hasValue(e.target)) {
-      this.setState({ isDisplayed: true });
-      this.view.convertDisplayProperty(this.model.getState('isDisplayed'));
-    } else {
-      this.setState({ isDisplayed: false });
-      this.view.convertDisplayProperty(this.model.getState('isDisplayed'));
-    }
-  };
-
-  clickEventHandlerForDisplayOff = ({ target }, node) => {
-    if (!this.model.getState('isDisplayed')) return;
-    if (hasTargetParent(target, node)) return;
-    this.setState({ isDisplayed: false });
-    this.view.convertDisplayProperty(this.model.getState('isDisplayed'));
   };
 }
 

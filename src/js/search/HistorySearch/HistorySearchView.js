@@ -1,7 +1,7 @@
-import { View } from '../../core/core.js';
+import { SearchView } from '../../search/Search/SearchView.js';
 import { selector, addClassName, removeClassName } from '../../utils/utils.js';
 
-class HistorySearchView extends View {
+class HistorySearchView extends SearchView {
   constructor() {
     super();
     this.searchInputEl = selector('.search-bar');
@@ -28,7 +28,7 @@ class HistorySearchView extends View {
     this.deleteSearchHistoryList();
     this.deleteAllSearchHistoryLists();
     this.onOffSearchHistory();
-    this.onOffDisplay();
+    this.onOffDisplay(this.historySearchWrapperEl);
   };
 
   displaySearchHistory = () => {
@@ -68,23 +68,6 @@ class HistorySearchView extends View {
         '<div>최근 검색어 기능이 꺼져있습니다.</div>';
       this.historyOnOffBtn.textContent = '최근검색어켜기';
     }
-  };
-
-  convertDisplayProperty = (state) => {
-    this.historySearchWrapperEl.style.display = state ? 'block' : 'none';
-  };
-
-  onOffDisplay = () => {
-    document.addEventListener('keyup', () =>
-      this.keyUpEventHandlerForViewOnOff(this.searchInputEl)
-    );
-    document.body.addEventListener('click', ({ target }) => {
-      this.clickEventHandlerForDisplayOff(
-        target,
-        this.historySearchWrapperEl,
-        'history-delete-btn'
-      );
-    });
   };
 }
 

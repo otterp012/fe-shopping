@@ -1,12 +1,7 @@
-import { Controller } from '../../core/core.js';
-import {
-  hasTargetParent,
-  hasTargetChild,
-  hasValue,
-  selector,
-} from '../../utils/utils.js';
+import { SearchController } from '../Search/SearchController.js';
+import { hasTargetParent, hasValue, selector } from '../../utils/utils.js';
 
-class HistorySearchController extends Controller {
+class HistorySearchController extends SearchController {
   constructor(model, view) {
     super();
     this.model = model;
@@ -22,8 +17,8 @@ class HistorySearchController extends Controller {
       this.clickEventHandlerForDeleteALLSearchHistory.bind(this);
     this.view.clickEventHandlerForOnOffSearchHistory =
       this.clickEventHandlerForOnOffSearchHistory.bind(this);
-    this.view.keyUpEventHandlerForViewOnOff =
-      this.keyUpEventHandlerForViewOnOff.bind(this);
+    this.view.keyUpEventHandlerForDisplayOnOff =
+      this.keyUpEventHandlerForDisplayOnOff.bind(this);
     this.view.clickEventHandlerForDisplayOff =
       this.clickEventHandlerForDisplayOff.bind(this);
   };
@@ -60,23 +55,6 @@ class HistorySearchController extends Controller {
       this.view.renderOnOffSearchHistory(
         this.model.getState('isSearchHistoryOn')
       );
-    }
-  };
-
-  clickEventHandlerForDisplayOff = (target, node, targetCalssName) => {
-    if (target.className === targetCalssName) return;
-    if (hasTargetParent(target, node)) return;
-    this.setStateProperty('isDisplayed', false);
-    this.view.onOffView(this.model.getState('isDisplayed'));
-  };
-
-  keyUpEventHandlerForViewOnOff = (node) => {
-    if (hasValue(node)) {
-      this.setStateProperty('isDisplayed', false);
-      this.view.convertDisplayProperty(this.model.getState('isDisplayed'));
-    } else {
-      this.setStateProperty('isDisplayed', true);
-      this.view.convertDisplayProperty(this.model.getState('isDisplayed'));
     }
   };
 }

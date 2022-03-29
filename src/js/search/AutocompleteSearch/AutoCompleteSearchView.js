@@ -1,13 +1,12 @@
-import { View } from '../../core/core.js';
-import { selector, debounce } from '../../utils/utils.js';
+import { SearchView } from '../../search/Search/SearchView.js';
+import { selector, hasValue, debounce } from '../../utils/utils.js';
 
-class AutoCompleteSearchView extends View {
+class AutoCompleteSearchView extends SearchView {
   constructor() {
     super();
     this.searchInputEl = selector('.search-bar');
     this.autoSearchWrapperEl = selector('.auto-search-wrapper');
-    this.renderAutoCompleteLists();
-    this.onOffAutoCompleteDisplay();
+    this.setEvents();
   }
 
   template = (state) => {
@@ -33,18 +32,9 @@ class AutoCompleteSearchView extends View {
     );
   };
 
-  convertDisplayProperty = (state) => {
-    this.autoSearchWrapperEl.style.display = state ? 'block' : 'none';
-  };
-
-  onOffAutoCompleteDisplay = () => {
-    this.searchInputEl.addEventListener('keyup', (e) =>
-      this.keyUpEventHandlerForDisplayOnOff(e)
-    );
-
-    document.addEventListener('click', (e) =>
-      this.clickEventHandlerForDisplayOff(e, this.autoSearchWrapperEl)
-    );
+  setEvents = () => {
+    this.renderAutoCompleteLists();
+    this.onOffDisplay(this.autoSearchWrapperEl);
   };
 
   renderAutoCompleteLists = () => {
