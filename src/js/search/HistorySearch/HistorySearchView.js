@@ -13,8 +13,7 @@ class HistorySearchView extends View {
 
   template = (str) => {
     return `<li class="history-search-list"><a href="#">${str}</a>
-          <button class="history-delete-btn">삭제</button>
-        </li>`;
+<button class="history-delete-btn">삭제</button></li>`;
   };
 
   render = (state) => {
@@ -35,7 +34,7 @@ class HistorySearchView extends View {
   displaySearchHistory = () => {
     selector('.search').addEventListener('submit', (e) => {
       e.preventDefault();
-      this.submitEventHandlerForDisplaySearchHistory();
+      this.submitEventHandlerForDisplaySearchHistory(this.searchInputEl.value);
       this.searchInputEl.value = '';
     });
   };
@@ -60,27 +59,32 @@ class HistorySearchView extends View {
 
   renderOnOffSearchHistory = (state) => {
     if (state) {
+      removeClassName(this.historySearchWrapperEl, 'close');
+      this.historyOnOffBtn.textContent = '최근검색어끄기';
+      this.searchHistoryListsEl.innerHTML = '';
+    } else {
       addClassName(this.historySearchWrapperEl, 'close');
       this.searchHistoryListsEl.innerHTML =
         '<div>최근 검색어 기능이 꺼져있습니다.</div>';
       this.historyOnOffBtn.textContent = '최근검색어켜기';
-    } else {
-      removeClassName(this.historySearchWrapperEl, 'close');
-      this.historyOnOffBtn.textContent = '최근검색어끄기';
-      this.searchHistoryListsEl.innerHTML = '';
     }
   };
 
-  onOffView = (state) => {
-    state
-      ? (this.historySearchWrapperEl.style.display = 'block')
-      : (this.historySearchWrapperEl.style.display = 'none');
+  convertDisplayProperty = (state) => {
+    this.historySearchWrapperEl.style.display = state ? 'block' : 'none';
   };
 
   onOffDisplay = () => {
-    document.addEventListener('click', (e) =>
-      this.clickEventHandlerForDisplayOff(e, this.historySearchWrapperEl)
+    document.addEventListener('keyup', () =>
+      this.keyUpEventHandlerForViewOnOff(this.searchInputEl)
     );
+    document.body.addEventListener('click', ({ target }) => {
+      this.clickEventHandlerForDisplayOff(
+        target,
+        this.historySearchWrapperEl,
+        'history-delete-btn'
+      );
+    });
   };
 }
 
