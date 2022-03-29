@@ -16,6 +16,7 @@ class HistorySearchModel extends Model {
       MAX_SEARCH_HISTORY_NUM: 10,
       localStorage: localStorage,
       LOCAL_STROAGE_NAME: 'historySearchStorage',
+      arrowEventCounter: -1,
     };
 
     Object.defineProperty(
@@ -28,6 +29,17 @@ class HistorySearchModel extends Model {
       'removedSearchHistoryList',
       this.RemoveListsGetterSetter()
     );
+
+    Object.defineProperty(this.state, 'isDisplayed', {
+      get() {
+        return this._isDisplayed;
+      },
+
+      set(value) {
+        this.arrowEventCounter = -1;
+        this._isDisplayed = value;
+      },
+    });
   };
 
   searchInputGetterSetter = () => {

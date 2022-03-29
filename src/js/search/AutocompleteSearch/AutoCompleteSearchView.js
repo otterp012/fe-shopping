@@ -6,6 +6,7 @@ class AutoCompleteSearchView extends SearchView {
     super();
     this.searchInputEl = selector('.search-bar');
     this.autoSearchWrapperEl = selector('.auto-search-wrapper');
+    this.autoSearchListsEl = selector('.auto-search-lists');
     this.setEvents();
   }
 
@@ -22,7 +23,7 @@ class AutoCompleteSearchView extends SearchView {
       autoSuggestions,
       this.searchInputEl.value
     );
-    selector('.auto-search-lists').innerHTML = this.template(highLightedLists);
+    this.autoSearchListsEl.innerHTML = this.template(highLightedLists);
   };
 
   highLightList = (autoCompletsLists, targetValue) => {
@@ -35,6 +36,7 @@ class AutoCompleteSearchView extends SearchView {
   setEvents = () => {
     this.renderAutoCompleteLists();
     this.onOffDisplay(this.autoSearchWrapperEl);
+    this.foucsList(this.autoSearchListsEl);
   };
 
   renderAutoCompleteLists = () => {

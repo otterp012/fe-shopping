@@ -29,6 +29,7 @@ class HistorySearchView extends SearchView {
     this.deleteAllSearchHistoryLists();
     this.onOffSearchHistory();
     this.onOffDisplay(this.historySearchWrapperEl);
+    this.foucsList(this.searchHistoryListsEl);
   };
 
   displaySearchHistory = () => {

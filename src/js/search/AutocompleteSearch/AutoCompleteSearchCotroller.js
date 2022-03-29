@@ -15,6 +15,7 @@ class AutoCompleteSearchCotroller extends SearchController {
       this.keyUpEventHandlerForDisplayOnOff.bind(this);
     this.view.clickEventHandlerForDisplayOff =
       this.clickEventHandlerForDisplayOff.bind(this);
+    this.view.arrowKeyEventHandler = this.arrowKeyEventHandler.bind(this);
   };
 
   renderAutoCompleteListsHandler = async (newInputValue) => {

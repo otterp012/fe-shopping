@@ -21,6 +21,7 @@ class HistorySearchController extends SearchController {
       this.keyUpEventHandlerForDisplayOnOff.bind(this);
     this.view.clickEventHandlerForDisplayOff =
       this.clickEventHandlerForDisplayOff.bind(this);
+    this.view.arrowKeyEventHandler = this.arrowKeyEventHandler.bind(this);
   };
 
   submitEventHandlerForDisplaySearchHistory = (newInputValue) => {

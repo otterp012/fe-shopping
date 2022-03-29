@@ -18,6 +18,12 @@ class SearchView extends View {
       this.clickEventHandlerForDisplayOff(target, node);
     });
   };
+
+  foucsList = (listsNode) => {
+    this.searchInputEl.addEventListener('keyup', ({ key }) => {
+      this.arrowKeyEventHandler(key, listsNode);
+    });
+  };
 }
 
 export { SearchView };

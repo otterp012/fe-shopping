@@ -11,7 +11,19 @@ class AutoCompleteSearchModel extends Model {
       promistAutoCompleteLists: null,
       isDisplayed: false,
       searchInputValue: null,
+      arrowEventCounter: -1,
     };
+
+    Object.defineProperty(this.state, 'isDisplayed', {
+      get() {
+        return this._isDisplayed;
+      },
+
+      set(value) {
+        this.arrowEventCounter = -1;
+        this._isDisplayed = value;
+      },
+    });
   };
 
   getPromiseAutoCompleteLists = async (prefix) => {
