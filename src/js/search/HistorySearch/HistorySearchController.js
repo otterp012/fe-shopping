@@ -1,5 +1,10 @@
 import { Controller } from '../../core/core.js';
-import { hasTargetParent, hasValue } from '../../utils/utils.js';
+import {
+  hasTargetParent,
+  hasTargetChild,
+  hasValue,
+  selector,
+} from '../../utils/utils.js';
 
 class HistorySearchController extends Controller {
   constructor(model, view) {
@@ -17,20 +22,15 @@ class HistorySearchController extends Controller {
       this.clickEventHandlerForDeleteALLSearchHistory.bind(this);
     this.view.clickEventHandlerForOnOffSearchHistory =
       this.clickEventHandlerForOnOffSearchHistory.bind(this);
-
+    this.view.keyUpEventHandlerForViewOnOff =
+      this.keyUpEventHandlerForViewOnOff.bind(this);
     this.view.clickEventHandlerForDisplayOff =
       this.clickEventHandlerForDisplayOff.bind(this);
   };
 
-  submitEventHandlerForDisplaySearchHistory = (e) => {
-    if (!hasValue(this.view.searchInputEl)) {
-      return;
-    }
-    this.setStateProperty('isDisplayed', true);
-    this.view.onOffView(this.model.getState('isDisplayed'));
-
-    const newInputValue = this.view.searchInputEl.value;
-    this.setStateProperty('searchInputValue', this.view.searchInputEl.value);
+  submitEventHandlerForDisplaySearchHistory = (newInputValue) => {
+    if (!this.model.getState('isSearchHistoryOn')) return;
+    this.setStateProperty('searchInputValue', newInputValue);
     this.render('historySearchLists');
   };
 
@@ -50,21 +50,34 @@ class HistorySearchController extends Controller {
   };
 
   clickEventHandlerForOnOffSearchHistory = () => {
-    const isSearchHistoryOn = this.model.getState('isSearchHistoryOn');
-    if (isSearchHistoryOn) {
+    if (this.model.getState('isSearchHistoryOn')) {
       this.setStateProperty('isSearchHistoryOn', false);
-      this.view.renderOnOffSearchHistory(isSearchHistoryOn);
+      this.view.renderOnOffSearchHistory(
+        this.model.getState('isSearchHistoryOn')
+      );
     } else {
       this.setStateProperty('isSearchHistoryOn', true);
-      this.view.renderOnOffSearchHistory(isSearchHistoryOn);
+      this.view.renderOnOffSearchHistory(
+        this.model.getState('isSearchHistoryOn')
+      );
     }
   };
 
-  clickEventHandlerForDisplayOff = ({ target }, node) => {
-    if (!this.model.getState('isDisplayed')) return;
+  clickEventHandlerForDisplayOff = (target, node, targetCalssName) => {
+    if (target.className === targetCalssName) return;
     if (hasTargetParent(target, node)) return;
-    this.setState({ isDisplayed: false });
+    this.setStateProperty('isDisplayed', false);
     this.view.onOffView(this.model.getState('isDisplayed'));
+  };
+
+  keyUpEventHandlerForViewOnOff = (node) => {
+    if (hasValue(node)) {
+      this.setStateProperty('isDisplayed', false);
+      this.view.convertDisplayProperty(this.model.getState('isDisplayed'));
+    } else {
+      this.setStateProperty('isDisplayed', true);
+      this.view.convertDisplayProperty(this.model.getState('isDisplayed'));
+    }
   };
 }
 
