@@ -1,9 +1,13 @@
-import { View } from '../../core/core.js';
+class SearchView {
+  constructor() {}
 
-class SearchView extends View {
-  constructor() {
-    super();
-  }
+  template = () => {
+    throw 'override!';
+  };
+
+  render = () => {
+    throw 'override!';
+  };
 
   convertDisplay = (state, node) => {
     node.style.display = state ? 'block' : 'none';

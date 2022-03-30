@@ -1,10 +1,18 @@
-import { Controller } from '../../core/core.js';
 import { hasTargetParent, hasValue, selector } from '../../utils/utils.js';
 
-class SearchController extends Controller {
-  constructor() {
-    super();
-  }
+class SearchController {
+  constructor() {}
+  setState = (newState) => {
+    this.model.setState(newState);
+  };
+
+  setStateProperty = (key, value) => {
+    this.model.state[key] = value;
+  };
+
+  render = (state) => {
+    this.view.render(this.model.getState(state));
+  };
 
   keyUpEventHandlerForDisplayOnOff = (e, node) => {
     if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {

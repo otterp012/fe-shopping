@@ -1,5 +1,4 @@
 import { SearchController } from '../Search/SearchController.js';
-import { hasTargetParent, hasValue, selector } from '../../utils/utils.js';
 
 class HistorySearchController extends SearchController {
   constructor(model, view) {

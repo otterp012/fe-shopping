@@ -1,6 +1,6 @@
-import { Model } from '../../core/core.js';
+import { SearchModel } from '../../search/Search/SearchModel.js';
 
-class HistorySearchModel extends Model {
+class HistorySearchModel extends SearchModel {
   constructor() {
     super();
     this.setUp();
